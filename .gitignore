@@ -1,0 +1,7 @@
+.idea
+yarn.lock
+yarn-error.log
+dist
+NFT-SS2-*
+node_modules
+**/.DS_Store
