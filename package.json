@@ -1,6 +1,6 @@
 {
   "name": "nsemea-core-poc",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "NSEMEA core netsuite library to manage records",
   "main": "none",
   "author": "Dario Da Silva",
@@ -11,5 +11,8 @@
   "devDependencies": {
     "@hitc/netsuite-types": "^2024.2.2",
     "typescript": "^5.6.2"
+  },
+  "dependencies": {
+    "fs-extra": "^11.2.0"
   }
 }
