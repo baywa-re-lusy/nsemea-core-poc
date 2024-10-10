@@ -1,12 +1,11 @@
 /**
- * NetSuite Purchase Order Record
+ * NetSuite purchase order record
  */
-
 import * as record from 'N/record'
-import { TransactionBase } from './Transaction'
-import { Sublist, SublistFieldType, SublistLine } from './Sublist'
-import { FieldType, Nullable } from './Record'
-import { AddressBase } from './AddressBase'
+import { TransactionBase } from '../Base/Transaction'
+import { Sublist, SublistFieldType, SublistLine } from '../Base/Sublist'
+import { FieldType, Nullable } from '../Base/Record'
+import { AddressBase } from '../Base/AddressBase'
 
 /**
  * Sublist 'item' on purchase orders
@@ -68,7 +67,7 @@ export class ItemSublist extends SublistLine {
 }
 
 /**
- * NetSuite Purchase Order Record
+ * NetSuite purchase order record
  */
 export class PurchaseOrderBase extends TransactionBase {
 
