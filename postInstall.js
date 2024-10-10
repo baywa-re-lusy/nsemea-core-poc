@@ -12,7 +12,7 @@ fsExtra.copy(source,destination,{ preserveTimestamps:true}, err => {
 console.log(`path : ${__dirname}`);
 
 const gitignorePath = path.resolve(__dirname, '../../.gitignore');
-const entriesToAdd = ['./src/Core'];
+const entriesToAdd = ['src/Core'];
 
 console.log(`gitignorePath ${gitignorePath}`);
 
