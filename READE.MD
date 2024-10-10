@@ -1,0 +1,1 @@
+NSEMEA core netsuite library to manage records
