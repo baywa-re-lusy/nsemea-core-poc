@@ -227,6 +227,7 @@ export interface AutoGetSetOptions {
    * this property.
    * If false or omitted, the "getValue" and "setValue" methods will be used instead.
    */
+  fieldId?: string;
   asText?: boolean;
 }
 
@@ -234,18 +235,18 @@ export function AutoGetSet(options?: AutoGetSetOptions): AutoGetSetDecorator {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   return function(accessor: ClassAccessorDecoratorTarget<any, any>, context: ClassAccessorDecoratorContext<NSTypedRecord, unknown>): ClassAccessorDecoratorResult<any, any> {
     const getter = function (this: NSTypedRecord) {
+      const fieldId = options?.fieldId ? options.fieldId : context.name.toString()
       return (options?.asText)
-        ? this.getText(context.name.toString())
-        : this.getValue(context.name.toString());
+        ? this.getText(fieldId)
+        : this.getValue(fieldId);
     };
 
     const setter = function (this: NSTypedRecord, value: record.FieldValue) {
+      const fieldId = options?.fieldId ? options.fieldId : context.name.toString()
       if (options?.asText) {
-        this.setText(context.name.toString(), value as string);
-      }
-
-      else {
-        this.setValue(context.name.toString(), value);
+        this.setText(fieldId, value as string);
+      } else {
+        this.setValue(fieldId, value);
       }
     };
 
