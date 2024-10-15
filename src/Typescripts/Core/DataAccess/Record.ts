@@ -9,7 +9,7 @@ import {Sublist, SublistLine} from "./Sublist";
 // cf. documentation on typescript's distributive conditional types
 export type NonFunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? never : K }[keyof T];
 
-// Typescript type definition : union type either a generic one or null
+// Typescripts type definition : union type either a generic one or null
 export type Nullable<T> = T | null;
 
 export abstract class NSTypedRecord {

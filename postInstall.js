@@ -2,8 +2,8 @@ const fsExtra = require('fs-extra');
 const fs = require('fs');
 const path = require('path');
 
-const source = path.join(process.cwd(),"src/Typescript/Core");
-const destination = '../../src/Typescript/Core';
+const source = path.join(process.cwd(),"src/Typescripts/Core");
+const destination = '../../src/Typescripts/Core';
 console.log(`copying NSEMEA core library from ${source} to ${destination}`);
 fsExtra.copy(source,destination,{ preserveTimestamps:true}, err => {
   console.error(err);
@@ -11,7 +11,7 @@ fsExtra.copy(source,destination,{ preserveTimestamps:true}, err => {
 
 console.log(`path : ${__dirname}`);
 const gitignorePath = path.resolve(__dirname, '../../.gitignore');
-const entriesToAdd = ['src/Typescript/Core'];
+const entriesToAdd = ['src/Typescripts/Core'];
 
 console.log(`gitignorePath ${gitignorePath}`);
 
