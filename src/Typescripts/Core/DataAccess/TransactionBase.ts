@@ -15,7 +15,7 @@ import { FieldValue, Type } from "N/record";
  */
 export class TransactionBase extends NSTypedRecord {
 
-  recordType () { return Type.SALES_ORDER }
+  override recordType () { return Type.SALES_ORDER }
 
   @AutoGetSet()
   accessor createddate: Date
