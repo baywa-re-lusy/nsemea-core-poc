@@ -235,6 +235,7 @@ export function AutoGetSet(options?: AutoGetSetOptions): AutoGetSetDecorator {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   return function(accessor: ClassAccessorDecoratorTarget<any, any>, context: ClassAccessorDecoratorContext<NSTypedRecord, unknown>): ClassAccessorDecoratorResult<any, any> {
     const getter = function (this: NSTypedRecord) {
+      log.debug('context in getter', JSON.stringify(context))
       const fieldId = options?.fieldId ? options.fieldId : context.name.toString()
       return (options?.asText)
         ? this.getText(fieldId)
