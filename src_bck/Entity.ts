@@ -1,7 +1,8 @@
 /**
  dummy comment for TypeDoc
  */
-import { FieldType, NSTypedRecord } from './Record'
+import { NSTypedRecord } from './Record'
+import * as FieldType from "./FieldType";
 
 /**
  * NetSuite generic Entity used as a common base class for 'entity-like' records,

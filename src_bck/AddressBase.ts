@@ -1,4 +1,5 @@
-import {FieldType, NSTypedRecord} from './Record'
+import { NSTypedRecord } from './Record'
+import * as FieldType from "./FieldType";
 
 /**
  * The addressbook 'subrecord'. In SS2.x this is mostly treated as a normal record,

@@ -2,7 +2,8 @@
  * NetSuite generic transaction record
  */
 
-import { FieldType, NSTypedRecord } from './Record'
+import { AutoGetSet, NSTypedRecord } from './NSTypedRecord'
+import { FieldValue, Type } from "N/record";
 
 /**
  * Fields common to all transactions in NS, and is the share base class for transaction types.
@@ -12,85 +13,87 @@ import { FieldType, NSTypedRecord } from './Record'
  * (since the record type cannot be ambiguous in those cases).
  *
  */
-export class TransactionBase extends  NSTypedRecord {
+export class TransactionBase extends NSTypedRecord {
 
-  @FieldType.datetime
-  createddate: Date
+  recordType () { return Type.SALES_ORDER }
 
-  @FieldType.select
-  customform: number
+  @AutoGetSet()
+  accessor createddate: Date
 
-  @FieldType.select
-  department: number
+  @AutoGetSet()
+  accessor customform: number
 
-  /**
-   * This field exists only if 'Use Deletion Reason' feature is enabled on the account
-   */
-  @FieldType.select
-  deletionreason: number
+  @AutoGetSet()
+  accessor department: number
 
   /**
    * This field exists only if 'Use Deletion Reason' feature is enabled on the account
    */
-  @FieldType.longtext
-  deletionreasonmemo: string
+  @AutoGetSet()
+  accessor deletionreason: number
 
-  @FieldType.freeformtext
-  email: string
+  /**
+   * This field exists only if 'Use Deletion Reason' feature is enabled on the account
+   */
+  @AutoGetSet()
+  accessor deletionreasonmemo: string
 
-  @FieldType.select
-  entity: number
+  @AutoGetSet()
+  accessor email: string
 
-  @FieldType.freeformtext
-  externalid: string
+  @AutoGetSet()
+  accessor entity: number
 
-  @FieldType.checkbox
-  istaxable: boolean
+  @AutoGetSet()
+  accessor externalid: string
 
-  @FieldType.datetime
-  lastmodifieddate: Date
+  @AutoGetSet()
+  accessor istaxable: boolean
 
-  @FieldType.select
-  location: number
+  @AutoGetSet()
+  accessor lastmodifieddate: Date
 
-  @FieldType.freeformtext
-  memo: string
+  @AutoGetSet()
+  accessor location: number
 
-  @FieldType.select
-  orderstatus: number | string
+  @AutoGetSet()
+  accessor memo: string
 
-  @FieldType.freeformtext
-  otherrefnum: string
+  @AutoGetSet()
+  accessor orderstatus: number | string
 
-  @FieldType.select
-  postingperiod: number
+  @AutoGetSet()
+  accessor otherrefnum: string
 
-  @FieldType.select
-  salesrep: number
+  @AutoGetSet()
+  accessor postingperiod: number
+
+  @AutoGetSet()
+  accessor salesrep: number
 
   /**
    * Note unlike other identifiers in NetSuite,
    * this one is a string (e.g. 'Partially Fulfilled')
    */
-  @FieldType.freeformtext
-  status: string
+  @AutoGetSet()
+  accessor status: string
 
   /**
    * Note unlike other references in NetSuite, this one is a set of
    * undocumented string keys (e.g. 'partiallyFulfilled')
    * The possible statusref values differ for each transaction type
    */
-  @FieldType.freeformtext
-  statusRef: string
+  @AutoGetSet()
+  accessor statusRef: string
 
-  @FieldType.select
-  subsidiary: number
+  @AutoGetSet()
+  accessor subsidiary: number
 
-  @FieldType.freeformtext
-  tranid: string
+  @AutoGetSet()
+  accessor tranid: string
 
-  @FieldType.date
-  trandate: Date
+  @AutoGetSet()
+  accessor trandate: Date
 
   /**
    * Locates line on the 'apply' sublist that corresponds to
@@ -101,7 +104,7 @@ export class TransactionBase extends  NSTypedRecord {
    * generally work using normal collection oriented means
    */
   protected findApplyLine (docId: number): { apply: boolean, amount: number, line: number } | null {
-    let rec = this.nsRecord
+    const rec = this._nsRecord
     if (!rec.isDynamic || !this.defaultValues)
       throw new Error('record must be in dynamic mode and have default values set to use this method')
 
@@ -111,23 +114,23 @@ export class TransactionBase extends  NSTypedRecord {
       value: docId.toString()
     })
 
-    // helper function for adding a 'current sublist' getter/settor for the given property name on the apply sublist
-    const addProp = (o: object, prop: any) => {
+    // helper function for adding a 'current sublist' getter/settor for the given property name on the applied sublist
+    const addProp = (o: object, prop: PropertyKey) => {
       Object.defineProperty(o, prop, {
         get: function () {
           rec.selectLine({sublistId: 'apply', line: line})
-          return rec.getCurrentSublistValue({sublistId: 'apply', fieldId: prop})
+          return rec.getCurrentSublistValue({sublistId: 'apply', fieldId: prop as string})
         },
-        set: function (value) {
+        set: function (value: FieldValue) {
           rec.selectLine({sublistId: 'apply', line: line})
-          rec.setCurrentSublistValue({sublistId: 'apply', fieldId: prop, value: value})
+          rec.setCurrentSublistValue({sublistId: 'apply', fieldId: prop as string, value: value})
           rec.commitLine({sublistId: 'apply'})
         }
       })
     }
 
     if (line >= 0) {
-      let newLine = {line: line}
+      const newLine = {line: line}
       addProp(newLine, 'apply')
       addProp(newLine, 'amount')
       return newLine as { apply: boolean, amount: number, line: number }
