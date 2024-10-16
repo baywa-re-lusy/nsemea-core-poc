@@ -4,6 +4,8 @@
 import * as record from 'N/record'
 import * as log from "N/log";
 import {FieldValue} from "N/record";
+// import {NSSubListLine} from "./NSSubListLine";
+// import {NSSubList} from "./NSSubList";
 
 // Union type either a record.Record or record.ClientCurrentRecord
 export type RecordLike = (record.Record | record.ClientCurrentRecord)
@@ -216,65 +218,68 @@ export abstract class NSTypedRecord {
   }
 
 }
-
-// eslint-disable-next-line  @typescript-eslint/no-explicit-any
-export type AutoGetSetDecorator = (accessor: ClassAccessorDecoratorTarget<any, any>, context: ClassAccessorDecoratorContext<NSTypedRecord, any>) => ClassAccessorDecoratorResult<any, any>;
-
-export interface AutoGetSetOptions {
-  /**
-   * When set to true, the "getText" and "setText" methods will be used
-   * on the underlying NetSuite Record API to get and set the values for
-   * this property.
-   * If false or omitted, the "getValue" and "setValue" methods will be used instead.
-   */
-  fieldId?: string
-  asText?: boolean
-}
-
-export function AutoGetSet(options?: AutoGetSetOptions): AutoGetSetDecorator {
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  return function(accessor: ClassAccessorDecoratorTarget<any, any>, context: ClassAccessorDecoratorContext<NSTypedRecord, unknown>): ClassAccessorDecoratorResult<any, any> {
-    const getter = function (this: NSTypedRecord) {
-      // log.debug('context in getter', JSON.stringify(context))
-      const fieldId = options?.fieldId ? options.fieldId : context.name.toString()
-      return (options?.asText)
-        ? this.getText(fieldId)
-        : this.getValue(fieldId)
-    };
-
-    const setter = function (this: NSTypedRecord, value: record.FieldValue) {
-      const fieldId = options?.fieldId ? options.fieldId : context.name.toString()
-      if (options?.asText) {
-        this.setText(fieldId, value as string);
-      } else {
-        this.setValue(fieldId, value)
-      }
-    };
-
-    return {
-      get: getter,
-      set: setter
-    }
-  }
-}
+//
+// // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+// export type AutoGetSetDecorator = (accessor: ClassAccessorDecoratorTarget<any, any>, context: ClassAccessorDecoratorContext<NSTypedRecord, any>) => ClassAccessorDecoratorResult<any, any>;
+//
+// export interface AutoGetSetOptions {
+//   /**
+//    * When set to true, the "getText" and "setText" methods will be used
+//    * on the underlying NetSuite Record API to get and set the values for
+//    * this property.
+//    * If false or omitted, the "getValue" and "setValue" methods will be used instead.
+//    */
+//   fieldId?: string
+//   asText?: boolean
+// }
+//
+// export function AutoGetSet(options?: AutoGetSetOptions): AutoGetSetDecorator {
+//   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+//   return function(accessor: ClassAccessorDecoratorTarget<any, any>, context: ClassAccessorDecoratorContext<NSTypedRecord, unknown>): ClassAccessorDecoratorResult<any, any> {
+//     const getter = function (this: NSTypedRecord) {
+//       // log.debug('context in getter', JSON.stringify(context))
+//       const fieldId = options?.fieldId ? options.fieldId : context.name.toString()
+//       return (options?.asText)
+//         ? this.getText(fieldId)
+//         : this.getValue(fieldId)
+//     };
+//
+//     const setter = function (this: NSTypedRecord, value: record.FieldValue) {
+//       const fieldId = options?.fieldId ? options.fieldId : context.name.toString()
+//       if (options?.asText) {
+//         this.setText(fieldId, value as string);
+//       } else {
+//         this.setValue(fieldId, value)
+//       }
+//     };
+//
+//     return {
+//       get: getter,
+//       set: setter
+//     }
+//   }
+// }
 
 export interface FieldTypeOptions {
+  fieldId?: string
   asText?: boolean
 }
 export function FieldTypeDecorator(options?: FieldTypeOptions) {
   return function <T extends NSTypedRecord, V extends FieldValue>(
     accessor: { get: (this: T) => V, set: (this: T, v: V) => void },
-    context: ClassAccessorDecoratorContext<T, V>) {
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+    context: ClassAccessorDecoratorContext<T, V>) :ClassAccessorDecoratorResult<any, any> {
+    const fieldId = options?.fieldId ? options.fieldId : context.name.toString()
     const getter = function (this: T) {
       return (options?.asText)
-        ? this.getText(context.name.toString())
-        : this.getValue(context.name.toString())
+        ? this.getText(fieldId) as string
+        : this.getValue(fieldId) as FieldValue
     }
     const setter = function (this: T, value: V) {
       if (options?.asText) {
-        this.setText(context.name.toString(), value as string);
+        this.setText(fieldId, value as string);
       } else {
-        this.setValue(context.name.toString(), value)
+        this.setValue(fieldId, value)
       }
     }
     return {
@@ -283,6 +288,20 @@ export function FieldTypeDecorator(options?: FieldTypeOptions) {
     }
   }
 }
+
+// export function SubListDecorator<T extends NSSubListLine>(ctor: new (subListId: string, rec: record.Record, line: number) => T) {
+//   return function <T extends NSSubListLine, V extends NSSubList<NSSubListLine>>(
+//     accessor: { get: (this: T) => V},
+//     context: ClassAccessorDecoratorContext<T, V>) {
+//     const getter = function (this: T) {
+//       return new ctor()
+//     }
+//     return {
+//       get: getter,
+//       enumerable: true
+//     }
+//   }
+// }
 
 export function SubRecordDecorator<T extends NSTypedRecord>(ctor: new (rec: record.Record) => T) {
   return function <T extends NSTypedRecord, V extends NSTypedRecord>(
@@ -296,6 +315,5 @@ export function SubRecordDecorator<T extends NSTypedRecord>(ctor: new (rec: reco
     return {
       get: getter
     }
-
   }
 }

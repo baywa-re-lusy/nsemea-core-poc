@@ -3,133 +3,133 @@
  */
 import * as record from 'N/record'
 import { TransactionBase } from './TransactionBase'
-import {AutoGetSet, Nullable, SubRecordDecorator} from "./NSTypedRecord";
+import {FieldTypeDecorator, Nullable, SubRecordDecorator} from "./NSTypedRecord";
 import { AddressBase } from "./AddressBase";
-// import { Sublist, SublistFieldType, SublistLine } from '../Core/DataAccess/Sublist'
-// import { AddressBase } from '../Core/DataAccess/AddressBase'
+import { NSSubListLine } from "./NSSubListLine";
+import { SubListFieldTypeDecorator } from "./NSSubList";
 
 /**
  * Sublist 'item' on purchase orders
  */
-// export class ItemSublist extends SublistLine {
-//
-//   @SublistFieldType.decimalnumber
-//   amount: number
-//
-//   @SublistFieldType.select
-//   class: number
-//
-//   @SublistFieldType.select
-//   customer: number
-//
-//   @SublistFieldType.checkbox
-//   deferrevrec: boolean
-//
-//   @SublistFieldType.select
-//   department: number
-//
-//   @SublistFieldType.textarea
-//   description: string
-//
-//   @SublistFieldType.date
-//   expectedreceiptdate: Date
-//
-//   @SublistFieldType.checkbox
-//   isclosed: boolean
-//
-//   @SublistFieldType.select
-//   item: number
-//
-//   @SublistFieldType.select
-//   location: Nullable<number>
-//
-//   @SublistFieldType.integernumber
-//   leadtime: Nullable<number>
-//
-//   @SublistFieldType.float
-//   quantity: number
-//
-//   @SublistFieldType.float
-//   quantityreceived: number
-//
-//   @SublistFieldType.float
-//   quantitybilled: number
-//
-//   @SublistFieldType.decimalnumber
-//   rate: number
-//
-//   @SublistFieldType.select
-//   units: number
-//
-//   // This is documented as `text` in the records browser
-//   // but shows up as what appears to be vendor internal id on records.
-//   @SublistFieldType.freeformtext
-//   vendorname: string | number
-// }
+export class ItemSublist extends NSSubListLine {
+
+  @SubListFieldTypeDecorator()
+  accessor amount: number
+
+  @SubListFieldTypeDecorator()
+  accessor class: number
+
+  @SubListFieldTypeDecorator()
+  accessor customer: number
+
+  @SubListFieldTypeDecorator()
+  accessor deferrevrec: boolean
+
+  @SubListFieldTypeDecorator()
+  accessor department: number
+
+  @SubListFieldTypeDecorator()
+  accessor description: string
+
+  @SubListFieldTypeDecorator()
+  accessor expectedreceiptdate: Date
+
+  @SubListFieldTypeDecorator()
+  accessor isclosed: boolean
+
+  @SubListFieldTypeDecorator()
+  accessor item: number
+
+  @SubListFieldTypeDecorator()
+  accessor location: Nullable<number>
+
+  @SubListFieldTypeDecorator()
+  accessor leadtime: Nullable<number>
+
+  @SubListFieldTypeDecorator()
+  accessor quantity: number
+
+  @SubListFieldTypeDecorator()
+  accessor quantityreceived: number
+
+  @SubListFieldTypeDecorator()
+  accessor quantitybilled: number
+
+  @SubListFieldTypeDecorator()
+  accessor rate: number
+
+  @SubListFieldTypeDecorator()
+  accessor units: number
+
+  // This is documented as `text` in the records browser
+  // but shows up as what appears to be vendor internal id on records.
+  @SubListFieldTypeDecorator()
+  accessor vendorname: string | number
+}
 
 /**
  * NetSuite purchase order record
  */
 export class SomeSampleClass extends TransactionBase {
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor approvalstatus: number
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor balance: Nullable<number>
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor class: Nullable<number>
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor createdfrom: Nullable<number>
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor currency: number
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor employee: Nullable<number>
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor incoterm: Nullable<number>
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor intercotransaction: Nullable<number>
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor isbasecurrency: boolean
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor shipdate: Date
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor shipmethod: Nullable<number>
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor shipto: Nullable<number>
 
   @SubRecordDecorator(AddressBase)
   accessor billingaddress: AddressBase
 
-  // @FieldType.subrecord(AddressBase)
-  // shippingaddress: AddressBase
+  @SubRecordDecorator(AddressBase)
+  accessor shippingaddress: AddressBase
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor terms: Nullable<number>
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor tobeemailed: Nullable<boolean>
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor tobefaxed: Nullable<boolean>
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor tobeprinted: Nullable<boolean>
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor total: number
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor unbilledorders: Nullable<number>
 
   //@FieldType.sublist(ItemSublist)

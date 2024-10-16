@@ -2,7 +2,7 @@
  * NetSuite generic transaction record
  */
 
-import { AutoGetSet, NSTypedRecord } from './NSTypedRecord'
+import { FieldTypeDecorator, NSTypedRecord } from './NSTypedRecord'
 import { FieldValue } from "N/record";
 
 /**
@@ -17,65 +17,65 @@ export class TransactionBase extends NSTypedRecord {
 
   override recordType () { return '' }
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor createddate: Date
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor customform: number
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor department: number
 
   /**
    * This field exists only if 'Use Deletion Reason' feature is enabled on the account
    */
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor deletionreason: number
 
   /**
    * This field exists only if 'Use Deletion Reason' feature is enabled on the account
    */
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor deletionreasonmemo: string
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor email: string
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor entity: number
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor externalid: string
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor istaxable: boolean
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor lastmodifieddate: Date
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor location: number
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor memo: string
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor orderstatus: number | string
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor otherrefnum: string
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor postingperiod: number
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor salesrep: number
 
   /**
    * Note unlike other identifiers in NetSuite,
    * this one is a string (e.g. 'Partially Fulfilled')
    */
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor status: string
 
   /**
@@ -83,16 +83,16 @@ export class TransactionBase extends NSTypedRecord {
    * undocumented string keys (e.g. 'partiallyFulfilled')
    * The possible statusref values differ for each transaction type
    */
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor statusRef: string
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor subsidiary: number
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor tranid: string
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor trandate: Date
 
   /**

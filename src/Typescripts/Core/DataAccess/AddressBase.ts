@@ -1,4 +1,4 @@
-import { AutoGetSet, NSTypedRecord } from './NSTypedRecord'
+import { FieldTypeDecorator, NSTypedRecord } from './NSTypedRecord'
 import {Type} from "N/record";
 
 /**
@@ -29,47 +29,47 @@ import {Type} from "N/record";
  */
 export class AddressBase extends NSTypedRecord {
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor addr1: string
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor addr2: string
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor addr3: string
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor addressee: string
 
   /**
    * Note this field name differs from the 'records browser' documentation
    */
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor addrphone: string
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor addrtext: string
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor attention: string
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor city: string
 
   /**
    * Unlike other `select` fields which take a numeric internal id value,
    * this one requires the country abbreviation as the key (e.g. 'US')
    */
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor country: string
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor state: string
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor zip: string
 
-  @AutoGetSet()
+  @FieldTypeDecorator()
   accessor override: boolean
 
   override recordType () { return ''}
