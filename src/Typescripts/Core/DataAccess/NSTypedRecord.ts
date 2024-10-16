@@ -3,6 +3,7 @@
  */
 import * as record from 'N/record'
 import * as log from "N/log";
+import {FieldValue} from "N/record";
 // import * as log from 'N/log'
 
 // Union type either a record.Record or record.ClientCurrentRecord
@@ -33,7 +34,7 @@ export abstract class NSTypedRecord {
   /**
    * The netsuite record type (constant string) - this is declared here and overridden in derived classes
    */
-  abstract recordType () : record.Type
+  abstract recordType () : string
 
   /**
    * Loads an existing NetSuite record with the given internal id
@@ -66,7 +67,7 @@ export abstract class NSTypedRecord {
     // using the line below we can pull the recordType property from the derived class
     // and remove the need for derived classes to define a constructor to pass the
     // record type to super()
-    const type: string = this.recordType() as string;
+    const type : string = this.recordType()
 
     if(!rec) {
       // No value passed so this means creating a new record
@@ -227,9 +228,8 @@ export interface AutoGetSetOptions {
    * this property.
    * If false or omitted, the "getValue" and "setValue" methods will be used instead.
    */
-  fieldId?: string;
-  asText?: boolean;
-  isSubRecord?: boolean;
+  fieldId?: string
+  asText?: boolean
 }
 
 export function AutoGetSet(options?: AutoGetSetOptions): AutoGetSetDecorator {
@@ -238,33 +238,49 @@ export function AutoGetSet(options?: AutoGetSetOptions): AutoGetSetDecorator {
     const getter = function (this: NSTypedRecord) {
       // log.debug('context in getter', JSON.stringify(context))
       const fieldId = options?.fieldId ? options.fieldId : context.name.toString()
-      const isSubRecord = options?.isSubRecord
-      if (isSubRecord) {
-        return this._nsRecord.getSubrecord({
-          fieldId: fieldId
-        })
-      } else {
-        return (options?.asText)
-          ? this.getText(fieldId)
-          : this.getValue(fieldId);
-      }
+      return (options?.asText)
+        ? this.getText(fieldId)
+        : this.getValue(fieldId)
     };
 
     const setter = function (this: NSTypedRecord, value: record.FieldValue) {
       const fieldId = options?.fieldId ? options.fieldId : context.name.toString()
-      const isSubRecord = options?.isSubRecord
-      if (!isSubRecord) {
-        if (options?.asText) {
-          this.setText(fieldId, value as string);
-        } else {
-          this.setValue(fieldId, value);
-        }
+      if (options?.asText) {
+        this.setText(fieldId, value as string);
+      } else {
+        this.setValue(fieldId, value)
       }
     };
 
     return {
       get: getter,
       set: setter
-    };
-  };
+    }
+  }
+}
+
+export interface FieldTypeOptions {
+  asText?: boolean
+}
+export function FieldTypeDecorator(options?: FieldTypeOptions) {
+  return function <T extends NSTypedRecord, V extends FieldValue>(
+    accessor: { get: (this: T) => V, set: (this: T, v: V) => void },
+    context: ClassAccessorDecoratorContext<T, V>) {
+    const getter = function (this: T) {
+      return (options?.asText)
+        ? this._nsRecord.getText(context.name.toString())
+        : this._nsRecord.getValue(context.name.toString())
+    }
+    const setter = function (this: T, value: V) {
+      if (options?.asText) {
+        this.setText(context.name.toString(), value as string);
+      } else {
+        this.setValue(context.name.toString(), value)
+      }
+    }
+    return {
+      get: getter,
+      set: setter
+    }
+  }
 }

@@ -3,7 +3,7 @@
  */
 
 import { AutoGetSet, NSTypedRecord } from './NSTypedRecord'
-import { FieldValue, Type } from "N/record";
+import { FieldValue } from "N/record";
 
 /**
  * Fields common to all transactions in NS, and is the share base class for transaction types.
@@ -15,7 +15,7 @@ import { FieldValue, Type } from "N/record";
  */
 export class TransactionBase extends NSTypedRecord {
 
-  override recordType () { return Type.SALES_ORDER }
+  override recordType () { return '' }
 
   @AutoGetSet()
   accessor createddate: Date
