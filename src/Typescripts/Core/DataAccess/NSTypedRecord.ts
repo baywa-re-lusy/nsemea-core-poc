@@ -4,7 +4,6 @@
 import * as record from 'N/record'
 import * as log from "N/log";
 import {FieldValue} from "N/record";
-// import * as log from 'N/log'
 
 // Union type either a record.Record or record.ClientCurrentRecord
 export type RecordLike = (record.Record | record.ClientCurrentRecord)
@@ -268,8 +267,8 @@ export function FieldTypeDecorator(options?: FieldTypeOptions) {
     context: ClassAccessorDecoratorContext<T, V>) {
     const getter = function (this: T) {
       return (options?.asText)
-        ? this._nsRecord.getText(context.name.toString())
-        : this._nsRecord.getValue(context.name.toString())
+        ? this.getText(context.name.toString())
+        : this.getValue(context.name.toString())
     }
     const setter = function (this: T, value: V) {
       if (options?.asText) {
@@ -282,5 +281,21 @@ export function FieldTypeDecorator(options?: FieldTypeOptions) {
       get: getter,
       set: setter
     }
+  }
+}
+
+export function SubRecordDecorator<T extends NSTypedRecord>(ctor: new (rec: record.Record) => T) {
+  return function <T extends NSTypedRecord, V extends NSTypedRecord>(
+    accessor: { get: (this: T) => V },
+    context: ClassAccessorDecoratorContext<T, V>) {
+
+    const getter = function (this: T) {
+      return new ctor(this._nsRecord.getSubrecord({fieldId : context.name.toString()}) as record.Record)
+    }
+
+    return {
+      get: getter
+    }
+
   }
 }

@@ -72,5 +72,5 @@ export class AddressBase extends NSTypedRecord {
   @AutoGetSet()
   accessor override: boolean
 
-  override recordType () { return Type.SALES_ORDER }
+  override recordType () { return ''}
 }
