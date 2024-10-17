@@ -6,7 +6,7 @@ import * as record from 'N/record'
 import * as log from "N/log";
 import {FieldValue} from "N/record";
 
-export abstract class NSSubList <T extends NSSubListLine>{
+export class NSSubList <T extends NSSubListLine>{
 
   /**
    * Holds Netsuite internal id (string name) of the sublist

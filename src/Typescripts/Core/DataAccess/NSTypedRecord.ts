@@ -4,8 +4,8 @@
 import * as record from 'N/record'
 import * as log from "N/log";
 import {FieldValue} from "N/record";
-// import {NSSubListLine} from "./NSSubListLine";
-// import {NSSubList} from "./NSSubList";
+import {NSSubListLine} from "./NSSubListLine";
+import {NSSubList} from "./NSSubList";
 
 // Union type either a record.Record or record.ClientCurrentRecord
 export type RecordLike = (record.Record | record.ClientCurrentRecord)
@@ -271,21 +271,23 @@ export function FieldTypeDecorator(options?: FieldTypeOptions) {
 //  */
 // const parseSublistProp = suffixParser('Sublist')
 
-// export function SubListDecorator<T extends NSTypedRecord>(ctor: new (subListId: string, rec: record.Record, line: number) => T) {
-//   return function <T extends NSTypedRecord, V extends NSSubList<NSSubListLine>>(
-//     accessor: { get: (this: T) => V},
-//     context: ClassAccessorDecoratorContext<T, V>) {
-//     const [, nssublist] = parseSublistProp(context.name.toString())
-//     const privateProp = `_${nssublist}`
-//     const getter = function (this: T) {
-//       return new ctor(this._nsRecord)
-//     }
-//     return {
-//       get: getter,
-//       enumerable: true
-//     }
-//   }
-// }
+export function SubListDecorator<T extends NSSubListLine>(ctor: new (subListId: string, rec: record.Record, line: number) => T) {
+  return function <T extends NSSubListLine, V extends NSSubList<NSSubListLine>>(
+    accessor: { get: (this: T) => V},
+    context: ClassAccessorDecoratorContext<T, V>) {
+    const propertyName = context.name.toString()
+    const getter = function (this: T) {
+      log.debug("SubListDecorator", "getter")
+
+      // Object.defineProperty(this, propertyName, { value: new NSSubList(ctor, this._nsRecord, propertyName) })
+      return new NSSubList(ctor, this._nsRecord, propertyName)
+    }
+    return {
+      get: getter,
+      enumerable: true
+    }
+  }
+}
 
 export function SubRecordDecorator<T extends NSTypedRecord>(ctor: new (rec: record.Record) => T) {
   return function <T extends NSTypedRecord, V extends NSTypedRecord>(
