@@ -6,7 +6,7 @@ import { TransactionBase } from './TransactionBase'
 import {FieldTypeDecorator, Nullable, SubRecordDecorator} from "./NSTypedRecord";
 import { AddressBase } from "./AddressBase";
 import { NSSubListLine } from "./NSSubListLine";
-import { SubListFieldTypeDecorator } from "./NSSubList";
+import {NSSubList, SubListFieldTypeDecorator} from "./NSSubList";
 
 /**
  * Sublist 'item' on purchase orders
@@ -133,7 +133,7 @@ export class SomeSampleClass extends TransactionBase {
   accessor unbilledorders: Nullable<number>
 
   //@FieldType.sublist(ItemSublist)
-  //item: Sublist<ItemSublist>
+  item: NSSubList<ItemSublist>
 
   override recordType () { return record.Type.PURCHASE_ORDER }
 }

@@ -19,25 +19,23 @@ export abstract class NSSubListLine {
   /**
    * Holds Netsuite internal id (string name) of the sublist
    */
-  // @NonEnumerableDecorator
   _subListId: string
 
   /**
    * The line number needed in decorator calls to underlying sublist
    */
-  // @NonEnumerableDecorator
   _line: number
 
   /**
    * Class member representing the underlying netsuite record object
    */
-  // @NonEnumerableDecorator
   _nsRecord: record.Record
 
   /**
    * If set to true, the field change and the secondary event is ignored.
    */
   ignoreFieldChange = false
+
   /**
    * If true, *and* in dynamic mode, this parameter can be used to alleviate a timing situation that may occur in some
    * browsers when fields are sourced. For some browsers, some APIs are triggered without waiting for the field
@@ -91,11 +89,3 @@ export abstract class NSSubListLine {
   }
 
 }
-
-// export function NonEnumerableDecorator<T extends NSSubListLine>(target: T, propertyKey: string) {
-//   const descriptor = Object.getOwnPropertyDescriptor(target, propertyKey) ?? {};
-//   if (descriptor.enumerable !== false) {
-//     descriptor.enumerable = false;
-//     Object.defineProperty(target, propertyKey, descriptor)
-//   }
-// }

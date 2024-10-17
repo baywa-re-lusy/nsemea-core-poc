@@ -218,47 +218,6 @@ export abstract class NSTypedRecord {
   }
 
 }
-//
-// // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-// export type AutoGetSetDecorator = (accessor: ClassAccessorDecoratorTarget<any, any>, context: ClassAccessorDecoratorContext<NSTypedRecord, any>) => ClassAccessorDecoratorResult<any, any>;
-//
-// export interface AutoGetSetOptions {
-//   /**
-//    * When set to true, the "getText" and "setText" methods will be used
-//    * on the underlying NetSuite Record API to get and set the values for
-//    * this property.
-//    * If false or omitted, the "getValue" and "setValue" methods will be used instead.
-//    */
-//   fieldId?: string
-//   asText?: boolean
-// }
-//
-// export function AutoGetSet(options?: AutoGetSetOptions): AutoGetSetDecorator {
-//   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-//   return function(accessor: ClassAccessorDecoratorTarget<any, any>, context: ClassAccessorDecoratorContext<NSTypedRecord, unknown>): ClassAccessorDecoratorResult<any, any> {
-//     const getter = function (this: NSTypedRecord) {
-//       // log.debug('context in getter', JSON.stringify(context))
-//       const fieldId = options?.fieldId ? options.fieldId : context.name.toString()
-//       return (options?.asText)
-//         ? this.getText(fieldId)
-//         : this.getValue(fieldId)
-//     };
-//
-//     const setter = function (this: NSTypedRecord, value: record.FieldValue) {
-//       const fieldId = options?.fieldId ? options.fieldId : context.name.toString()
-//       if (options?.asText) {
-//         this.setText(fieldId, value as string);
-//       } else {
-//         this.setValue(fieldId, value)
-//       }
-//     };
-//
-//     return {
-//       get: getter,
-//       set: setter
-//     }
-//   }
-// }
 
 export interface FieldTypeOptions {
   fieldId?: string
@@ -289,12 +248,37 @@ export function FieldTypeDecorator(options?: FieldTypeOptions) {
   }
 }
 
-// export function SubListDecorator<T extends NSSubListLine>(ctor: new (subListId: string, rec: record.Record, line: number) => T) {
-//   return function <T extends NSSubListLine, V extends NSSubList<NSSubListLine>>(
+// /**
+//  * Returns a function for parsing property names from a declaration (e.g.
+//  * properties that end with 'Sublist' suffix per convention)
+//  * @param suffixToSearch string that may be at the end of a property name. this string will be strippped off
+//  * the end of the property name if it is present.
+//  * @returns function that takes a property name and returns a pair [flag indicating this field matched the suffix,
+//  * the stripped property name (with suffix removed)]
+//  */
+// function suffixParser (suffixToSearch: string): (propertyKey: string) => [boolean, string] {
+//   return function (propertyKey: string) {
+//     const endsWithSuffix = propertyKey.endsWith(suffixToSearch)
+//     return [endsWithSuffix, endsWithSuffix ? propertyKey.replace(suffixToSearch, '') : propertyKey]
+//   }
+// }
+//
+// /**
+//  * parses a property name from a declaration (supporting 'Sublist' suffix per convention)
+//  * @param propertyKey original property name as declared on class
+//  * @returns pair consisting of a flag indicating this is actually a sublist and the actual ns sublist name (with
+//  * Sublist suffix removed)
+//  */
+// const parseSublistProp = suffixParser('Sublist')
+
+// export function SubListDecorator<T extends NSTypedRecord>(ctor: new (subListId: string, rec: record.Record, line: number) => T) {
+//   return function <T extends NSTypedRecord, V extends NSSubList<NSSubListLine>>(
 //     accessor: { get: (this: T) => V},
 //     context: ClassAccessorDecoratorContext<T, V>) {
+//     const [, nssublist] = parseSublistProp(context.name.toString())
+//     const privateProp = `_${nssublist}`
 //     const getter = function (this: T) {
-//       return new ctor()
+//       return new ctor(this._nsRecord)
 //     }
 //     return {
 //       get: getter,
