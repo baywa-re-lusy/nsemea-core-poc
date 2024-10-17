@@ -259,6 +259,7 @@ function getSublistValue (this: NSSubListLine, fieldId: string, isText: boolean)
 }
 
 export interface SubListTypeOptions {
+  fieldId?: string
   asText?: boolean
 }
 export function SubListFieldTypeDecorator(options?: SubListTypeOptions) {
@@ -267,11 +268,12 @@ export function SubListFieldTypeDecorator(options?: SubListTypeOptions) {
     // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     context: ClassAccessorDecoratorContext<T, V>): ClassAccessorDecoratorResult<any, any>  {
     const isText = options?.asText ? options.asText : false
+    const fieldId = options?.fieldId ? options.fieldId : context.name.toString()
     const getter = function (this: T) {
-      return getSublistValue.call(this, context.name.toString(), isText) as FieldValue
+      return getSublistValue.call(this, fieldId, isText) as FieldValue
     }
     const setter = function (this: T, value: V) {
-      setSublistValue.call(this, context.name.toString(), value, isText)
+      setSublistValue.call(this, fieldId, value, isText)
     }
     return {
       get: getter,
