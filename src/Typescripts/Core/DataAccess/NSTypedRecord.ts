@@ -272,19 +272,19 @@ export function FieldTypeDecorator(options?: FieldTypeOptions) {
 // const parseSublistProp = suffixParser('Sublist')
 
 export function SubListDecorator<T extends NSSubListLine>(ctor: new (subListId: string, rec: record.Record, line: number) => T) {
-  return function <T extends NSSubListLine, V extends NSSubList<NSSubListLine>>(
+  return function <T extends NSTypedRecord, V extends NSSubList<NSSubListLine>>(
     accessor: { get: (this: T) => V},
     context: ClassAccessorDecoratorContext<T, V>) {
     const propertyName = context.name.toString()
     const getter = function (this: T) {
       log.debug("SubListDecorator", "getter")
+      log.debug("SubListDecorator", propertyName)
 
       // Object.defineProperty(this, propertyName, { value: new NSSubList(ctor, this._nsRecord, propertyName) })
-      return new NSSubList(ctor, this._nsRecord, propertyName)
+      return new NSSubList(ctor, this._nsRecord as record.Record, propertyName)
     }
     return {
-      get: getter,
-      enumerable: true
+      get: getter
     }
   }
 }
