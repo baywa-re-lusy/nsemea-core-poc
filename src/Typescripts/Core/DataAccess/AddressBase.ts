@@ -1,5 +1,5 @@
-import { FieldTypeDecorator, NSTypedRecord } from './NSTypedRecord'
-import {Type} from "N/record";
+import { FieldTypeDecorator, NSTypedRecord } from './NSTypedRecord';
+import { Type } from 'N/record';
 
 /**
  * The addressbook 'subrecord'. In SS2.x this is mostly treated as a normal record,
@@ -28,49 +28,50 @@ import {Type} from "N/record";
  ```
  */
 export class AddressBase extends NSTypedRecord {
+  @FieldTypeDecorator()
+  accessor addr1: string;
 
   @FieldTypeDecorator()
-  accessor addr1: string
+  accessor addr2: string;
 
   @FieldTypeDecorator()
-  accessor addr2: string
+  accessor addr3: string;
 
   @FieldTypeDecorator()
-  accessor addr3: string
-
-  @FieldTypeDecorator()
-  accessor addressee: string
+  accessor addressee: string;
 
   /**
    * Note this field name differs from the 'records browser' documentation
    */
   @FieldTypeDecorator()
-  accessor addrphone: string
+  accessor addrphone: string;
 
   @FieldTypeDecorator()
-  accessor addrtext: string
+  accessor addrtext: string;
 
   @FieldTypeDecorator()
-  accessor attention: string
+  accessor attention: string;
 
   @FieldTypeDecorator()
-  accessor city: string
+  accessor city: string;
 
   /**
    * Unlike other `select` fields which take a numeric internal id value,
    * this one requires the country abbreviation as the key (e.g. 'US')
    */
   @FieldTypeDecorator()
-  accessor country: string
+  accessor country: string;
 
   @FieldTypeDecorator()
-  accessor state: string
+  accessor state: string;
 
   @FieldTypeDecorator()
-  accessor zip: string
+  accessor zip: string;
 
   @FieldTypeDecorator()
-  accessor override: boolean
+  accessor override: boolean;
 
-  override recordType () { return ''}
+  override recordType() {
+    return '';
+  }
 }

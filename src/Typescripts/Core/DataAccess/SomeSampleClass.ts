@@ -1,139 +1,144 @@
 /**
  * NetSuite purchase order record
  */
-import * as record from 'N/record'
-import { TransactionBase } from './TransactionBase'
-import {FieldTypeDecorator, Nullable, SubListDecorator, SubRecordDecorator} from "./NSTypedRecord";
-import { AddressBase } from "./AddressBase";
-import { NSSubListLine } from "./NSSubListLine";
-import {NSSubList, SubListFieldTypeDecorator} from "./NSSubList";
+import * as record from 'N/record';
+import { TransactionBase } from './TransactionBase';
+import {
+  FieldTypeDecorator,
+  Nullable,
+  SubListDecorator,
+  SubRecordDecorator,
+} from './NSTypedRecord';
+import { AddressBase } from './AddressBase';
+import { NSSubListLine } from './NSSubListLine';
+import { NSSubList, SubListFieldTypeDecorator } from './NSSubList';
 
 /**
  * Sublist 'item' on purchase orders
  */
 export class ItemSublist extends NSSubListLine {
+  @SubListFieldTypeDecorator()
+  accessor amount: number;
 
   @SubListFieldTypeDecorator()
-  accessor amount: number
+  accessor class: number;
 
   @SubListFieldTypeDecorator()
-  accessor class: number
+  accessor customer: number;
 
   @SubListFieldTypeDecorator()
-  accessor customer: number
+  accessor deferrevrec: boolean;
 
   @SubListFieldTypeDecorator()
-  accessor deferrevrec: boolean
+  accessor department: number;
 
   @SubListFieldTypeDecorator()
-  accessor department: number
+  accessor description: string;
 
   @SubListFieldTypeDecorator()
-  accessor description: string
+  accessor expectedreceiptdate: Date;
 
   @SubListFieldTypeDecorator()
-  accessor expectedreceiptdate: Date
+  accessor isclosed: boolean;
 
   @SubListFieldTypeDecorator()
-  accessor isclosed: boolean
+  accessor item: number;
 
   @SubListFieldTypeDecorator()
-  accessor item: number
+  accessor location: Nullable<number>;
 
   @SubListFieldTypeDecorator()
-  accessor location: Nullable<number>
+  accessor leadtime: Nullable<number>;
 
   @SubListFieldTypeDecorator()
-  accessor leadtime: Nullable<number>
+  accessor quantity: number;
 
   @SubListFieldTypeDecorator()
-  accessor quantity: number
+  accessor quantityreceived: number;
 
   @SubListFieldTypeDecorator()
-  accessor quantityreceived: number
+  accessor quantitybilled: number;
 
   @SubListFieldTypeDecorator()
-  accessor quantitybilled: number
+  accessor rate: number;
 
   @SubListFieldTypeDecorator()
-  accessor rate: number
-
-  @SubListFieldTypeDecorator()
-  accessor units: number
+  accessor units: number;
 
   // This is documented as `text` in the records browser
   // but shows up as what appears to be vendor internal id on records.
   @SubListFieldTypeDecorator()
-  accessor vendorname: string | number
+  accessor vendorname: string | number;
 }
 
 /**
  * NetSuite purchase order record
  */
 export class SomeSampleClass extends TransactionBase {
+  @FieldTypeDecorator()
+  accessor approvalstatus: number;
 
   @FieldTypeDecorator()
-  accessor approvalstatus: number
+  accessor balance: Nullable<number>;
 
   @FieldTypeDecorator()
-  accessor balance: Nullable<number>
+  accessor class: Nullable<number>;
 
   @FieldTypeDecorator()
-  accessor class: Nullable<number>
+  accessor createdfrom: Nullable<number>;
 
   @FieldTypeDecorator()
-  accessor createdfrom: Nullable<number>
+  accessor currency: number;
 
   @FieldTypeDecorator()
-  accessor currency: number
+  accessor employee: Nullable<number>;
 
   @FieldTypeDecorator()
-  accessor employee: Nullable<number>
+  accessor incoterm: Nullable<number>;
 
   @FieldTypeDecorator()
-  accessor incoterm: Nullable<number>
+  accessor intercotransaction: Nullable<number>;
 
   @FieldTypeDecorator()
-  accessor intercotransaction: Nullable<number>
+  accessor isbasecurrency: boolean;
 
   @FieldTypeDecorator()
-  accessor isbasecurrency: boolean
+  accessor shipdate: Date;
 
   @FieldTypeDecorator()
-  accessor shipdate: Date
+  accessor shipmethod: Nullable<number>;
 
   @FieldTypeDecorator()
-  accessor shipmethod: Nullable<number>
-
-  @FieldTypeDecorator()
-  accessor shipto: Nullable<number>
+  accessor shipto: Nullable<number>;
 
   @SubRecordDecorator(AddressBase)
-  accessor billingaddress: AddressBase
+  accessor billingaddress: AddressBase;
 
   @SubRecordDecorator(AddressBase)
-  accessor shippingaddress: AddressBase
+  accessor shippingaddress: AddressBase;
 
   @FieldTypeDecorator()
-  accessor terms: Nullable<number>
+  accessor terms: Nullable<number>;
 
   @FieldTypeDecorator()
-  accessor tobeemailed: Nullable<boolean>
+  accessor tobeemailed: Nullable<boolean>;
 
   @FieldTypeDecorator()
-  accessor tobefaxed: Nullable<boolean>
+  accessor tobefaxed: Nullable<boolean>;
 
   @FieldTypeDecorator()
-  accessor tobeprinted: Nullable<boolean>
+  accessor tobeprinted: Nullable<boolean>;
 
   @FieldTypeDecorator()
-  accessor total: number
+  accessor total: number;
 
   @FieldTypeDecorator()
-  accessor unbilledorders: Nullable<number>
+  accessor unbilledorders: Nullable<number>;
 
   @SubListDecorator(ItemSublist)
-  accessor item: NSSubList<ItemSublist>
+  accessor item: NSSubList<ItemSublist>;
 
-  override recordType () { return record.Type.PURCHASE_ORDER }
+  override recordType() {
+    return record.Type.PURCHASE_ORDER;
+  }
 }

@@ -2,7 +2,7 @@
  * Reprensents a NetSuite sublist-line object
  */
 
-import * as record from 'N/record'
+import * as record from 'N/record';
 
 /**
  * Base class for a sublist line.
@@ -15,26 +15,25 @@ import * as record from 'N/record'
  * Class property names should be the netsuite field internal id.
  */
 export abstract class NSSubListLine {
-
   /**
    * Holds Netsuite internal id (string name) of the sublist
    */
-  _subListId: string
+  _subListId: string;
 
   /**
    * The line number needed in decorator calls to underlying sublist
    */
-  _line: number
+  _line: number;
 
   /**
    * Class member representing the underlying netsuite record object
    */
-  _nsRecord: record.Record
+  _nsRecord: record.Record;
 
   /**
    * If set to true, the field change and the secondary event is ignored.
    */
-  ignoreFieldChange = false
+  ignoreFieldChange = false;
 
   /**
    * If true, *and* in dynamic mode, this parameter can be used to alleviate a timing situation that may occur in some
@@ -42,7 +41,7 @@ export abstract class NSSubListLine {
    * sourcing to complete. For example, if forceSyncSourcing is set to false when adding sublist lines, the lines
    * aren't committed as expected. Setting the parameter to true, forces synchronous sourcing.
    */
-  forceSyncSourcing = false
+  forceSyncSourcing = false;
 
   /**
    * If true, uses dynamic mode API calls to access sublist line field values.
@@ -51,7 +50,7 @@ export abstract class NSSubListLine {
    * (force using 'standard mode' APIs even with a dynamic record) by setting this value `false` prior to
    * your code that manipulates the sublist line.
    */
-  useDynamicModeAPI: boolean
+  useDynamicModeAPI: boolean;
   /**
    * Note that the sublistId and _line are used by the Sublist decorators to actually implement functionality, even
    * though they are not referenced directly in this class. We mark them as not-enumerable because they are an implementation
@@ -60,11 +59,11 @@ export abstract class NSSubListLine {
    * @param {Record} rec netsuite record on which the sublist exists
    * @param {number} line the line number needed in decorator calls to underlying sublist
    */
-  constructor (subListId: string, rec: record.Record, line: number) {
-    this._nsRecord = rec
-    this._subListId = subListId
-    this._line = line
-    this.useDynamicModeAPI = rec.isDynamic
+  constructor(subListId: string, rec: record.Record, line: number) {
+    this._nsRecord = rec;
+    this._subListId = subListId;
+    this._line = line;
+    this.useDynamicModeAPI = rec.isDynamic;
   }
 
   /**
@@ -79,13 +78,22 @@ export abstract class NSSubListLine {
    * ```
    * @param fieldId the field that points to the subrecord
    */
-  getSubRecord (fieldId: string) {
+  getSubRecord(fieldId: string) {
     if (this.useDynamicModeAPI) {
-      this._nsRecord.selectLine({ sublistId: this._subListId, line: this._line })
-      return this._nsRecord.getCurrentSublistSubrecord({ fieldId: fieldId, sublistId: this._subListId })
+      this._nsRecord.selectLine({
+        sublistId: this._subListId,
+        line: this._line,
+      });
+      return this._nsRecord.getCurrentSublistSubrecord({
+        fieldId: fieldId,
+        sublistId: this._subListId,
+      });
     } else {
-      return this._nsRecord.getSublistSubrecord({ fieldId: fieldId, sublistId: this._subListId, line: this._line })
+      return this._nsRecord.getSublistSubrecord({
+        fieldId: fieldId,
+        sublistId: this._subListId,
+        line: this._line,
+      });
     }
   }
-
 }
