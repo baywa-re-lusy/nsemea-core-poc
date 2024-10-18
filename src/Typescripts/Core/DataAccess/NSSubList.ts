@@ -3,7 +3,7 @@
  */
 import { NSSubListLine } from './NSSubListLine';
 import * as record from 'N/record';
-import * as log from 'N/log';
+// import * as log from 'N/log';
 import { FieldValue } from 'N/record';
 
 export class NSSubList<T extends NSSubListLine> {
@@ -90,10 +90,10 @@ export class NSSubList<T extends NSSubListLine> {
    * should be <= length of the list
    */
   addLine(ignoreRecalc = true, insertAt: number = this.length): T {
-    log.debug(
-      'Inserting line',
-      `sublist: ${this._subListId} insert at line:${insertAt}`,
-    );
+    // log.debug(
+    //   'Inserting line',
+    //   `sublist: ${this._subListId} insert at line:${insertAt}`,
+    // );
     if (insertAt > this.length) {
       throw Error(
         `Insertion index (${insertAt}) cannot be greater than sublist length (${this.length})`,
@@ -109,7 +109,7 @@ export class NSSubList<T extends NSSubListLine> {
       });
       this.rebuildArray();
     }
-    log.debug('Line count after adding', this.length);
+    // log.debug('Line count after adding', this.length);
     return this._useDynamicModeAPI && this._nsRecord.isDynamic
       ? this[this.length]
       : this[insertAt];
@@ -123,7 +123,7 @@ export class NSSubList<T extends NSSubListLine> {
     while (this.length > 0) {
       const lineNum = this.length - 1;
       this.removeLine(lineNum, ignoreRecalc);
-      log.debug('Removed line', lineNum);
+      // log.debug('Removed line', lineNum);
     }
     this.rebuildArray();
     return this;
@@ -153,7 +153,7 @@ export class NSSubList<T extends NSSubListLine> {
         'Do not call commitLine() on records in standard mode, commitLine() is only needed in dynamic mode',
       );
     }
-    log.debug('Committing line', `sublist: ${this._subListId}`);
+    // log.debug('Committing line', `sublist: ${this._subListId}`);
     this._nsRecord.commitLine({ sublistId: this._subListId });
     this.rebuildArray();
   }
@@ -163,7 +163,7 @@ export class NSSubList<T extends NSSubListLine> {
    * @param line line number
    */
   selectLine(line: number) {
-    log.debug('Selecting line', line);
+    // log.debug('Selecting line', line);
     this._nsRecord.selectLine({ sublistId: this._subListId, line: line });
   }
 
@@ -186,15 +186,15 @@ export class NSSubList<T extends NSSubListLine> {
    * as needed when a user dynamically works with sublist rows.
    */
   protected rebuildArray() {
-    log.debug('Sublist rebuild array', 'Deleting existing numeric properties');
+    // log.debug('Sublist rebuild array', 'Deleting existing numeric properties');
     Object.getOwnPropertyNames(this)
       .filter((key) => !isNaN(+key))
       .forEach((key) => delete this[key], this);
-    log.debug('Sublist after deleting properties', this);
-    log.debug(
-      'Building sublist',
-      `type:${this._subListId}, linecount:${this.length}`,
-    );
+    // log.debug('Sublist after deleting properties', this);
+    // log.debug(
+    //   'Building sublist',
+    //   `type:${this._subListId}, linecount:${this.length}`,
+    // );
 
     // Create a sublist line indexed property of type T for each member of the underlying sublist
     for (let i = 0; i < this.length; i++) {
@@ -291,7 +291,7 @@ function getSublistValue(
     sublistId: this._subListId,
     fieldId: fieldId,
   };
-  log.debug(`Getting sublist ${isText ? 'text' : 'value'}`, options);
+  // log.debug(`Getting sublist ${isText ? 'text' : 'value'}`, options);
   if (this.useDynamicModeAPI && this._nsRecord.isDynamic) {
     this._nsRecord.selectLine({ sublistId: this._subListId, line: this._line });
     return isText

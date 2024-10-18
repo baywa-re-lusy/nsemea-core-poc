@@ -257,8 +257,8 @@ export function SubListDecorator<T extends NSSubListLine>(
   ) {
     const propertyName = context.name.toString();
     const getter = function (this: T) {
-      log.debug('SubListDecorator', 'getter');
-      log.debug('SubListDecorator', propertyName);
+      // log.debug('SubListDecorator', 'getter');
+      // log.debug('SubListDecorator', propertyName);
 
       // Object.defineProperty(this, propertyName, { value: new NSSubList(ctor, this._nsRecord, propertyName) })
       return new NSSubList(ctor, this._nsRecord as record.Record, propertyName);

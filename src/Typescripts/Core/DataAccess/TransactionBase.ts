@@ -1,7 +1,6 @@
 /**
  * NetSuite generic transaction record
  */
-
 import { FieldTypeDecorator, NSTypedRecord } from './NSTypedRecord';
 import { FieldValue } from 'N/record';
 
