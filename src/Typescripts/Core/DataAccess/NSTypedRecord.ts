@@ -223,8 +223,8 @@ export interface FieldTypeOptions {
 export function FieldTypeDecorator(options?: FieldTypeOptions) {
   return function <T extends NSTypedRecord, V extends FieldValue>(
     accessor: { get: (this: T) => V; set: (this: T, v: V) => void },
-    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     context: ClassAccessorDecoratorContext<T, V>,
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   ): ClassAccessorDecoratorResult<any, any> {
     const fieldId = options?.fieldId
       ? options.fieldId

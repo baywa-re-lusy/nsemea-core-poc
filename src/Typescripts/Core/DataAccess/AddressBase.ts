@@ -1,5 +1,4 @@
 import { FieldTypeDecorator, NSTypedRecord } from './NSTypedRecord';
-import { Type } from 'N/record';
 
 /**
  * The addressbook 'subrecord'. In SS2.x this is mostly treated as a normal record,

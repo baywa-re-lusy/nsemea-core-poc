@@ -7,7 +7,8 @@
   "license": "MIT",
   "scripts": {
     "postinstall": "node postInstallCore.js",
-    "prettier": "prettier --ignore-path .gitignore --write \"./src/**/*.ts\""
+    "prettier": "prettier --ignore-path .gitignore --write \"./src/**/*.ts\"",
+    "lint": "eslint ./src/**/*.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.12.0",

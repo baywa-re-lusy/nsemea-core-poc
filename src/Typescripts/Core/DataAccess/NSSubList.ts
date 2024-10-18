@@ -311,8 +311,8 @@ export interface SubListTypeOptions {
 export function SubListFieldTypeDecorator(options?: SubListTypeOptions) {
   return function <T extends NSSubListLine, V extends FieldValue>(
     accessor: { get: (this: T) => V; set: (this: T, v: V) => void },
-    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     context: ClassAccessorDecoratorContext<T, V>,
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   ): ClassAccessorDecoratorResult<any, any> {
     const isText = options?.asText ? options.asText : false;
     const fieldId = options?.fieldId
