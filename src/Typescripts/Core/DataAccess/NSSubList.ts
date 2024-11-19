@@ -47,6 +47,12 @@ export class NSSubList<T extends NSSubListLine> {
     nsRec: record.Record,
     subListId: string,
   ) {
+
+    nonenumerable(this, 'subListLineType');
+    nonenumerable(this, '_useDynamicModeAPI');
+    nonenumerable(this, '_nsRecord');
+    nonenumerable(this, '_subListId');
+
     this.subListLineType = subListLineType;
     this._subListId = subListId;
     this._nsRecord = nsRec;
@@ -329,4 +335,14 @@ export function SubListFieldTypeDecorator(options?: SubListTypeOptions) {
       set: setter,
     };
   };
+}
+
+export function nonenumerable (target: any, propertyKey: string) {
+  let descriptor = Object.getOwnPropertyDescriptor(target, propertyKey) || {};
+  if (descriptor.enumerable !== false) {
+    descriptor.enumerable = false;
+    descriptor.writable = true;
+    descriptor.configurable = true;
+    Object.defineProperty(target, propertyKey, descriptor)
+  }
 }
