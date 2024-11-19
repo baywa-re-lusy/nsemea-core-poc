@@ -31,6 +31,8 @@ export class NSSubList<T extends NSSubListLine> {
   // enforce 'array like' interaction through indexers
   [i: number]: T;
 
+  _entries: T[];
+
   /**
    * Constructs a new array-like representation of a NS sublist.
    * @param subListLineType the type (should be a class extending `SublistLine`) to represent individual rows
@@ -201,12 +203,14 @@ export class NSSubList<T extends NSSubListLine> {
     //   'Building sublist',
     //   `type:${this._subListId}, linecount:${this.length}`,
     // );
+    this._entries = <T[]>[];
 
     // Create a sublist line indexed property of type T for each member of the underlying sublist
     for (let i = 0; i < this.length; i++) {
       const line = new this.subListLineType(this._subListId, this._nsRecord, i);
       line.useDynamicModeAPI = this._useDynamicModeAPI;
       this[i] = line;
+      this._entries.push(line);
     }
 
     // If dynamic mode we always have an additional ready-to-fill out line at the end of the list,
