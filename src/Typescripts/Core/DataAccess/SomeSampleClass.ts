@@ -3,6 +3,7 @@
  */
 import * as record from 'N/record';
 import { TransactionBase } from './TransactionBase';
+
 import {
   FieldTypeDecorator,
   Nullable,

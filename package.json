@@ -1,6 +1,6 @@
 {
   "name": "nsemea-core-poc",
-  "version": "1.0.27",
+  "version": "1.0.28",
   "description": "NSEMEA core netsuite library to manage records",
   "main": "none",
   "author": "Dario Da Silva",
@@ -8,16 +8,19 @@
   "scripts": {
     "postinstall": "node postInstallCore.js",
     "prettier": "prettier --ignore-path .gitignore --write \"./src/**/*.ts\"",
-    "lint": "eslint ./src/**/*.ts"
+    "lint": "eslint ./src/**/*.ts",
+    "test": "vitest"
   },
   "devDependencies": {
     "@eslint/js": "^9.12.0",
     "@hitc/netsuite-types": "^2024.2.2",
     "@types/eslint__js": "^8.42.3",
+    "@types/node": "^22.9.0",
     "eslint": "^9.12.0",
     "prettier": "^3.3.3",
     "typescript": "^5.6.3",
-    "typescript-eslint": "^8.9.0"
+    "typescript-eslint": "^8.9.0",
+    "vitest": "^2.1.4"
   },
   "dependencies": {
     "fs-extra": "^11.2.0"
