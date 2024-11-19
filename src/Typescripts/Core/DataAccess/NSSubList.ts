@@ -31,7 +31,10 @@ export class NSSubList<T extends NSSubListLine> {
   // enforce 'array like' interaction through indexers
   [i: number]: T;
 
-  _entries: T[];
+  /**
+   * Class member representing an array containing the entries of a sublist
+   */
+  entries: T[];
 
   /**
    * Constructs a new array-like representation of a NS sublist.
@@ -54,6 +57,7 @@ export class NSSubList<T extends NSSubListLine> {
     nonenumerable(this, '_useDynamicModeAPI');
     nonenumerable(this, '_nsRecord');
     nonenumerable(this, '_subListId');
+    nonenumerable(this, 'entries');
 
     this.subListLineType = subListLineType;
     this._subListId = subListId;
@@ -203,14 +207,14 @@ export class NSSubList<T extends NSSubListLine> {
     //   'Building sublist',
     //   `type:${this._subListId}, linecount:${this.length}`,
     // );
-    this._entries = <T[]>[];
+    this.entries = <T[]>[];
 
     // Create a sublist line indexed property of type T for each member of the underlying sublist
     for (let i = 0; i < this.length; i++) {
       const line = new this.subListLineType(this._subListId, this._nsRecord, i);
       line.useDynamicModeAPI = this._useDynamicModeAPI;
       this[i] = line;
-      this._entries.push(line);
+      this.entries.push(line);
     }
 
     // If dynamic mode we always have an additional ready-to-fill out line at the end of the list,
