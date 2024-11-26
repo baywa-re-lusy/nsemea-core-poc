@@ -318,6 +318,14 @@ function getSublistValue(
   }
 }
 
+/**
+ * Returns the line number of the currently selected line.
+ * Note that line indexing begins at 0
+ */
+function getCurrentSublistIndex () {
+  return this._nsRecord.getCurrentSublistIndex({ sublistId: this._subListId });
+}
+
 export interface SubListTypeOptions {
   fieldId?: string;
   asText?: boolean;
