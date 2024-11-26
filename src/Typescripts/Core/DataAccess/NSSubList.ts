@@ -194,6 +194,14 @@ export class NSSubList<T extends NSSubListLine> {
   }
 
   /**
+   * Returns the line number of the currently selected line.
+   * Note that line indexing begins at 0
+   */
+  getCurrentSublistIndex () {
+    return this._nsRecord.getCurrentSublistIndex({ sublistId: this._subListId });
+  }
+
+  /**
    * Upserts the indexed props (array-like structure) This is called once at construction, but also
    * as needed when a user dynamically works with sublist rows.
    */
@@ -316,14 +324,6 @@ function getSublistValue(
       ? this._nsRecord.getSublistText({ ...options, line: this._line })
       : this._nsRecord.getSublistValue({ ...options, line: this._line });
   }
-}
-
-/**
- * Returns the line number of the currently selected line.
- * Note that line indexing begins at 0
- */
-function getCurrentSublistIndex () {
-  return this._nsRecord.getCurrentSublistIndex({ sublistId: this._subListId });
 }
 
 export interface SubListTypeOptions {
