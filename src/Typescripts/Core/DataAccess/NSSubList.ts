@@ -265,6 +265,7 @@ function setSublistValue(
   };
 
   if (this.useDynamicModeAPI && this._nsRecord.isDynamic) {
+    console.log('>> CORE << [setSublistValue]', fieldId, value, options);
     this._nsRecord.selectLine({ sublistId: this._subListId, line: this._line });
 
     if (isText) {
