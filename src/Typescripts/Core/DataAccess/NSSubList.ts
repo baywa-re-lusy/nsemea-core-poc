@@ -273,6 +273,8 @@ function setSublistValue(
   console.log(`>> CORE << line : ${this._line}`);
   console.log(`>> CORE << isText : ${isText}`);
   console.log(`>> CORE << options : ${JSON.stringify(options)}`);
+  console.log(`>> CORE << ignoreFieldChange : ${this.ignoreFieldChange}`);
+  console.log(`>> CORE << forceSyncSourcing : ${this.forceSyncSourcing}`);
 
   if (this.useDynamicModeAPI && this._nsRecord.isDynamic) {
 

@@ -1,6 +1,6 @@
 {
   "name": "nsemea-core-poc",
-  "version": "1.0.36",
+  "version": "1.0.37",
   "description": "NSEMEA core netsuite library to manage records",
   "main": "none",
   "author": "Dario Da Silva",
