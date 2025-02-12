@@ -263,9 +263,13 @@ function setSublistValue(
     sublistId: this._subListId,
     fieldId: fieldId,
   };
+  console.log('>> CORE << methode : setSublistValue');
+  console.log(`>> CORE << useDynamicModeAPI : ${this.useDynamicModeAPI}`);
+  console.log(`>> CORE << nsRecord.isDynamic : ${this._nsRecord.isDynamic}`);
+  console.log(`>> CORE << subListId : ${this._subListId}`);
+  console.log(`>> CORE << line : ${this._line}`);
 
   if (this.useDynamicModeAPI && this._nsRecord.isDynamic) {
-    console.log('>> CORE << [setSublistValue]', fieldId, value, options);
     this._nsRecord.selectLine({ sublistId: this._subListId, line: this._line });
 
     if (isText) {
