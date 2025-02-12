@@ -160,12 +160,15 @@ export class NSSubList<T extends NSSubListLine> {
    * you don't need to call this method
    */
   commitLine() {
+    console.log('>> CORE << methode : commitLine');
+    console.log(`>> CORE << nsRecord.isDynamic : ${this._nsRecord.isDynamic}`);
     if (!this._nsRecord.isDynamic) {
       throw Error(
         'Do not call commitLine() on records in standard mode, commitLine() is only needed in dynamic mode',
       );
     }
     // log.debug('Committing line', `sublist: ${this._subListId}`);
+    console.log(`>> CORE << sublistId : ${this._subListId}`);
     this._nsRecord.commitLine({ sublistId: this._subListId });
     this.rebuildArray();
   }
@@ -268,9 +271,14 @@ function setSublistValue(
   console.log(`>> CORE << nsRecord.isDynamic : ${this._nsRecord.isDynamic}`);
   console.log(`>> CORE << subListId : ${this._subListId}`);
   console.log(`>> CORE << line : ${this._line}`);
+  console.log(`>> CORE << isText : ${isText}`);
+  console.log(`>> CORE << options : ${JSON.stringify(options)}`);
 
   if (this.useDynamicModeAPI && this._nsRecord.isDynamic) {
+
+    console.log(`>> CORE << before select line`);
     this._nsRecord.selectLine({ sublistId: this._subListId, line: this._line });
+    console.log(`>> CORE << after select line`);
 
     if (isText) {
       this._nsRecord.setCurrentSublistText({
@@ -280,12 +288,14 @@ function setSublistValue(
         text: value as string,
       });
     } else {
+      console.log(`>> CORE << before setCurrentSublistValue`);
       this._nsRecord.setCurrentSublistValue({
         ...options,
         ignoreFieldChange: this.ignoreFieldChange,
         forceSyncSourcing: this.forceSyncSourcing,
         value: value,
       });
+      console.log(`>> CORE << after setCurrentSublistValue`);
     }
   } else {
     if (isText) {
