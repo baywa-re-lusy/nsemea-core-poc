@@ -92,14 +92,7 @@ export function nsSearchResult2obj <T = {}>(useLabels = true, addGetTextProps = 
  * const oneResult = Seq(LazySearch.load('1234')).map(nsSearchResult2obj()).take(1)
  * ```
  */
-export class LazySearch implements IterableIterator<search.Result> {
-
-  /**
-   * LazySearch is both an iterable and an iterator for search results.
-   */
-  [Symbol.iterator] (): IterableIterator<search.Result> {
-    return this;
-  }
+export class LazySearch {
 
   // /**
   //  * A LazySearch is iterable per the iterable protocol, which also plays nicely with immutablejs
@@ -111,19 +104,6 @@ export class LazySearch implements IterableIterator<search.Result> {
    * @param id internal id of the search to load
    * @param pageSize how many records to retrieve per page (paging is automatic) Maximum value: 1000
    * @returns {LazySearch}
-   *
-   * @example do something for each search result, automatically exiting if out of governance.
-   *
-   * ```typescript
-   *
-   * import {Seq} from './X.Y.Z/immutable'
-   * import {governanceRemains, LazySearch, nsSearchResult2obj} from './NFT-X.Y.Z/search'
-   *
-   * Seq(LazySearch.load('1234'))
-   *   .takeWhile(governanceRemains()) // process until we drop below default governance threshold
-   *   .map(nsSearchResult2obj()) // convert search results to plain objects with properties
-   *   .forEach( r => log.debug(r))
-   * ```
    */
   static load(id: string, pageSize?: number) {
     return new LazySearch(search.load({id: id}), pageSize);
@@ -134,38 +114,14 @@ export class LazySearch implements IterableIterator<search.Result> {
    * @param search
    * @param pageSize
    * @returns {LazySearch}
-   *
-   * @example create a search and begin lazy processing of results
-   *
-   * ```
-   * import {Seq} from './X.Y.Z/immutable'
-   * import * as search from 'N/search
-   * import {governanceRemains, LazySearch, nsSearchResult2obj} from './NFT-X.Y.Z/search'
-   *
-   * Seq(LazySearch.from(search.create({
-   *    filters: [['internalid', 'anyof', [1,2]),
-   *    columns:['item', 'description'],
-   *    type: search.Type.ITEM,
-   *  })))
-   *   .takeWhile(governanceRemains()) // process until we drop below default governance threshold
-   *   .map(nsSearchResult2obj()) // convert search results to plain objects with properties
-   *   .forEach( r => log.debug(r))
-   * ```
    */
   static from(search: search.Search, pageSize?: number) {
     return new LazySearch(search, pageSize);
   }
 
   // the current set of search results. This is replaced as we cross from one page to the next to keep a constant memory footprint
-  protected currentData: search.Result[];
-  // index into currentData[] pointing to the 'current' search result
-  protected index: number;
-  // Starting point of the next page
-  protected nextPageStart: number = 0;
-  // Current range of the search result
-  protected currentRange: search.Result[];
-  // Fully executed search (simply, a search.run())
-  protected executedSearch: search.ResultSet;
+  protected searchResult: search.Result[];
+
   // Total length of the search result set
   protected totalSearchResultLength: number = 0;
 
@@ -178,70 +134,34 @@ export class LazySearch implements IterableIterator<search.Result> {
     if (pageSize > 1000) throw new Error('page size must be <= 1000');
     log.debug('pageSize', pageSize);
 
-    this.currentData = [];
-    this.executedSearch = search.run();
-    log.debug('executedSearch', this.executedSearch);
+    this.totalSearchResultLength = search.runPaged().count;
+    let resultSet = search.run();
+    let resultSubSet: search.Result[];
+    let index = 0;
+    let start=0;
+    let end=0;
 
-    this.currentRange = this.executedSearch.getRange({
-      start: 0,
-      end: pageSize
-    });
-    log.debug('Length', this.currentRange.length);
-    if (this.currentRange.length) {
+    do {
 
-      this.nextPageStart = this.currentRange.length;
-      log.debug('results returned', this.nextPageStart);
+      start = index;
+      end = index + pageSize;
 
-    } else {
-      this.currentData = [];
-      log.debug('run() search return zero results', '');
-    }
+      if (this.totalSearchResultLength <= end) end = this.totalSearchResultLength;
+      resultSubSet = resultSet.getRange({start: start, end: end});
 
-    this.index = 0;
+      if (resultSubSet.length === 0) {
+        break;
+      } else {
+        this.searchResult = this.searchResult.concat(resultSubSet);
+      }
+
+      index += resultSubSet.length;
+      if (this.totalSearchResultLength === index) break;
+
+    } while ( index <= this.totalSearchResultLength )
+
     log.debug(`lazy search id ${search.searchId || 'ad-hoc'}`,
       `using "page" size ${this.pageSize}, record count ${this.totalSearchResultLength}`);
   }
 
-  /**
-   * per the iterator protocol, retrieves the next element. Also returns `null` if done as the specification for
-   * the protocol says the value property is optional when 'done'
-   *
-   * You don't typically call this function yourself - libraries like ImmutableJS do.
-   */
-  next (): IteratorResult<search.Result> {
-
-    log.debug('In Next function', '');
-    log.debug('index', this.index);
-    log.debug('currentRange.length', this.currentRange.length);
-    const atEndOfRange = this.index === this.currentRange.length;
-
-    if (atEndOfRange) {
-      this.index = 0;
-      this.currentRange = this.executedSearch.getRange({
-        start: this.nextPageStart,
-        end: this.nextPageStart + this.pageSize
-      });
-      log.debug('this.currentRange.length === 0', this.currentRange.length === 0);
-      if(this.currentRange.length === 0) return {
-        done: true,
-        value: null
-      };
-      this.nextPageStart = this.nextPageStart + this.currentRange.length;
-    }
-
-    log.debug(`returning from next`,
-      {
-        done: false,
-        value: this.currentRange[this.index]
-      })
-    log.debug('this.index', this.index);
-    log.debug('this.currentRange[this.index]', this.currentRange[this.index]);
-    const obj = {
-      done: false,
-      value: this.currentRange[this.index]
-    };
-    this.index++;
-    return obj;
-
-  }
 }
