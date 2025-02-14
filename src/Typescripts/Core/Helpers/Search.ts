@@ -132,26 +132,34 @@ export class LazySearch {
    */
   private constructor (private search: search.Search, private pageSize = 1000) {
     if (pageSize > 1000) throw new Error('page size must be <= 1000');
-    log.debug('pageSize', pageSize);
+    log.debug('LazySearch : pageSize', pageSize);
 
+    this.searchResult = [];
     this.totalSearchResultLength = search.runPaged().count;
+    log.debug('LazySearch : total entries', this.totalSearchResultLength);
+
     let resultSet = search.run();
     let resultSubSet: search.Result[];
-    let index = 0;
-    let start=0;
-    let end=0;
+    let index= 0;
+    let start= 0;
+    let end= 0;
 
     do {
 
       start = index;
       end = index + pageSize;
 
+      log.debug('LazySearch : start / end', `${start} - ${end}`);
+
       if (this.totalSearchResultLength <= end) end = this.totalSearchResultLength;
       resultSubSet = resultSet.getRange({start: start, end: end});
+
+      log.debug('LazySearch : sub set entries', resultSubSet.length);
 
       if (resultSubSet.length === 0) {
         break;
       } else {
+
         this.searchResult = this.searchResult.concat(resultSubSet);
       }
 
