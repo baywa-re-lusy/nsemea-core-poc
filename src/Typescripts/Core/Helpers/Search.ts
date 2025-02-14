@@ -55,20 +55,20 @@ export type BaseSearchResult<T> = ObjectWithId<T> & { recordType:string | search
  */
 export function nsSearchResult2obj <T = {}>(useLabels = true, addGetTextProps = true): (r:search.Result)=> BaseSearchResult<T> {
   return function (result: search.Result) {
-    let output : { id:string, recordType?:string | search.Type } = {id: result.id, recordType:result.recordType }
+    let output : { id:string, recordType?:string | search.Type } = {id: result.id, recordType:result.recordType };
     // assigns each column VALUE from the search result to the output object
     if (result.columns && result.columns.length > 0)
       result.columns.forEach((col) => {
-        const propName = (useLabels && col.label) ? col.label : col.name
-        output[propName] = result.getValue(col)
+        const propName = (useLabels && col.label) ? col.label : col.name;
+        output[propName] = result.getValue(col);
         // if the column has a truthy text value,
         // include that as a 'propnameText' field similar to how nsdal behaves
         if (addGetTextProps) {
-          const text = result.getText(col)
-          if (text) output[`${propName}Text`] = text
+          const text = result.getText(col);
+          if (text) output[`${propName}Text`] = text;
         }
       })
-    return output as BaseSearchResult<T>
+    return output as BaseSearchResult<T>;
   }
 }
 
@@ -98,7 +98,7 @@ export class LazySearch implements IterableIterator<search.Result> {
    * LazySearch is both an iterable and an iterator for search results.
    */
   [Symbol.iterator] (): IterableIterator<search.Result> {
-    return this
+    return this;
   }
 
   // /**
@@ -126,7 +126,7 @@ export class LazySearch implements IterableIterator<search.Result> {
    * ```
    */
   static load(id: string, pageSize?: number) {
-    return new LazySearch(search.load({id: id}), pageSize)
+    return new LazySearch(search.load({id: id}), pageSize);
   }
 
   /**
@@ -153,21 +153,21 @@ export class LazySearch implements IterableIterator<search.Result> {
    * ```
    */
   static from(search: search.Search, pageSize?: number) {
-    return new LazySearch(search, pageSize)
+    return new LazySearch(search, pageSize);
   }
 
   // the current set of search results. This is replaced as we cross from one page to the next to keep a constant memory footprint
-  protected currentData: search.Result[]
+  protected currentData: search.Result[];
   // index into currentData[] pointing to the 'current' search result
-  protected index: number
+  protected index: number;
   // Starting point of the next page
-  protected nextPageStart: number = 0
+  protected nextPageStart: number = 0;
   // Current range of the search result
-  protected currentRange: search.Result[]
+  protected currentRange: search.Result[];
   // Fully executed search (simply, a search.run())
-  protected executedSearch: search.ResultSet
+  protected executedSearch: search.ResultSet;
   // Total length of the search result set
-  protected totalSearchResultLength: number = 0
+  protected totalSearchResultLength: number = 0;
 
   /**
    * Not meant to be used directly, use factory methods such as `load` or `from`
@@ -175,29 +175,31 @@ export class LazySearch implements IterableIterator<search.Result> {
    * @param pageSize optional pagesize, can be up to 1000
    */
   private constructor (private search: search.Search, private pageSize = 1000) {
-    if (pageSize > 1000) throw new Error('page size must be <= 1000')
-    log.debug('pageSize', pageSize)
+    if (pageSize > 1000) throw new Error('page size must be <= 1000');
+    log.debug('pageSize', pageSize);
 
-    this.currentData = []
-    this.executedSearch = search.run()
+    this.currentData = [];
+    this.executedSearch = search.run();
+    log.debug('executedSearch', this.executedSearch);
+
     this.currentRange = this.executedSearch.getRange({
       start: 0,
       end: pageSize
-    })
-    log.debug('Length', this.currentRange.length)
+    });
+    log.debug('Length', this.currentRange.length);
     if (this.currentRange.length) {
 
-      this.nextPageStart = this.currentRange.length
-      log.debug('results returned', this.nextPageStart)
+      this.nextPageStart = this.currentRange.length;
+      log.debug('results returned', this.nextPageStart);
 
     } else {
-      this.currentData = []
-      log.debug('run() search return zero results', '')
+      this.currentData = [];
+      log.debug('run() search return zero results', '');
     }
 
-    this.index = 0
+    this.index = 0;
     log.debug(`lazy search id ${search.searchId || 'ad-hoc'}`,
-      `using "page" size ${this.pageSize}, record count ${this.totalSearchResultLength}`)
+      `using "page" size ${this.pageSize}, record count ${this.totalSearchResultLength}`);
   }
 
   /**
@@ -208,23 +210,23 @@ export class LazySearch implements IterableIterator<search.Result> {
    */
   next (): IteratorResult<search.Result> {
 
-    log.debug('In Next function', '')
+    log.debug('In Next function', '');
     log.debug('index', this.index);
     log.debug('currentRange.length', this.currentRange.length);
-    const atEndOfRange = this.index === this.currentRange.length
+    const atEndOfRange = this.index === this.currentRange.length;
 
     if (atEndOfRange) {
-      this.index = 0
+      this.index = 0;
       this.currentRange = this.executedSearch.getRange({
         start: this.nextPageStart,
         end: this.nextPageStart + this.pageSize
-      })
+      });
       log.debug('this.currentRange.length === 0', this.currentRange.length === 0);
       if(this.currentRange.length === 0) return {
         done: true,
         value: null
-      }
-      this.nextPageStart = this.nextPageStart + this.currentRange.length
+      };
+      this.nextPageStart = this.nextPageStart + this.currentRange.length;
     }
 
     log.debug(`returning from next`,
@@ -232,14 +234,14 @@ export class LazySearch implements IterableIterator<search.Result> {
         done: false,
         value: this.currentRange[this.index]
       })
-    log.debug('this.index', this.index)
-    log.debug('this.currentRange[this.index]', this.currentRange[this.index])
+    log.debug('this.index', this.index);
+    log.debug('this.currentRange[this.index]', this.currentRange[this.index]);
     const obj = {
       done: false,
       value: this.currentRange[this.index]
-    }
-    this.index++
-    return obj
+    };
+    this.index++;
+    return obj;
 
   }
 }
