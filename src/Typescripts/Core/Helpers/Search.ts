@@ -122,6 +122,8 @@ export class LazySearch {
   // the current set of search results. This is replaced as we cross from one page to the next to keep a constant memory footprint
   protected searchResult: search.Result[];
 
+  protected mappedData: any[];
+
   // Total length of the search result set
   protected totalSearchResultLength: number = 0;
 
@@ -168,8 +170,11 @@ export class LazySearch {
 
     } while ( index <= this.totalSearchResultLength )
 
+    this.mappedData = this.searchResult.map(nsSearchResult2obj());
+
     log.debug(`lazy search id ${search.searchId || 'ad-hoc'}`,
       `using "page" size ${this.pageSize}, record count ${this.totalSearchResultLength}`);
+
   }
 
 }
