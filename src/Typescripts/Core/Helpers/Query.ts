@@ -29,7 +29,6 @@ export class LazyQuery {
     if (pageSize > 1000) throw new Error('page size must be <= 1000');
 
     let pagedData: query.PagedData;
-    let iterator: query.PageIterator;
 
     if(!q.params) {
       pagedData = query.runSuiteQLPaged({ query: q.query, pageSize: pageSize});
