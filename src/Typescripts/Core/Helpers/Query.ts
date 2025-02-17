@@ -23,28 +23,40 @@ export class LazyQuery {
   /**
    * Not meant to be used directly, use factory methods such as `load` or `from`
    * @param q object of query and parameters
-   * @param pageSize optional pagesize, can be up to 1000
+   * @param pageSize pagesize, can be up to 1000
+   * @param pagedQuery boolean, should query be executed as paged query or not
    */
-  private constructor (q: { query: string, params?: Array<string | number | boolean> }, pageSize = 500) {
-    if (pageSize > 1000) throw new Error('page size must be <= 1000');
-
-    let pagedData: query.PagedData;
-
-    if(!q.params) {
-      pagedData = query.runSuiteQLPaged({ query: q.query, pageSize: pageSize});
-    } else {
-      pagedData = query.runSuiteQLPaged({ query: q.query, params: q.params, pageSize: pageSize});
-    }
+  private constructor (q: { query: string, params?: Array<string | number | boolean> }, pageSize = 500, pagedQuery = true) {
 
     this.mappedData = [];
 
-    for (let i = 0; i < pagedData.pageRanges.length; i++) {
-      const currentPage = pagedData.fetch({index: i});
-      this.mappedData = this.mappedData.concat(currentPage.data.asMappedResults());
-    }
+    if (pagedQuery) {
+      if (pageSize > 1000) throw new Error('page size must be <= 1000');
 
-    log.debug(`lazy query `,
-      `using page size ${pagedData.pageSize}, record count ${pagedData.count}`);
+      let pagedData: query.PagedData;
+
+      if(!q.params) {
+        pagedData = query.runSuiteQLPaged({ query: q.query, pageSize: pageSize});
+      } else {
+        pagedData = query.runSuiteQLPaged({ query: q.query, params: q.params, pageSize: pageSize});
+      }
+
+      for (let i = 0; i < pagedData.pageRanges.length; i++) {
+        const currentPage = pagedData.fetch({index: i});
+        this.mappedData = this.mappedData.concat(currentPage.data.asMappedResults());
+      }
+
+      log.debug(`lazy query `,
+        `using page size ${pagedData.pageSize}, record count ${pagedData.count}`);
+    } else {
+      let queryResults: query.ResultSet;
+      if(!q.params) {
+        queryResults = query.runSuiteQL({query: q.query});
+      } else {
+        queryResults = query.runSuiteQL({query: q.query, params: q.params});
+      }
+      this.mappedData = this.mappedData.concat(queryResults.asMappedResults());
+    }
   }
 
   /**
@@ -54,6 +66,12 @@ export class LazyQuery {
    * @returns Lazy Seq ready for processing
    */
   static from (q: {query: string, params?: Array<string | number | boolean>}, pageSize?: number) {
-    return new LazyQuery(q, pageSize)
+    let result: LazyQuery;
+    if (typeof(pageSize) !== 'undefined') {
+      result = new LazyQuery(q, pageSize, true);
+    } else {
+      result = new LazyQuery(q, pageSize, false);
+    }
+    return result;
   }
 }
