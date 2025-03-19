@@ -3,7 +3,7 @@
  */
 import { NSSubListLine } from './NSSubListLine';
 import * as record from 'N/record';
-// import * as log from 'N/log';
+import * as log from 'N/log';
 import { FieldValue } from 'N/record';
 
 export class NSSubList<T extends NSSubListLine> {
@@ -132,9 +132,10 @@ export class NSSubList<T extends NSSubListLine> {
    * @param ignoreRecalc passed through to nsrecord.removeLine (ignores firing recalc event as each line is removed )
    */
   removeAllLines(ignoreRecalc = true) {
+    let lineNum = this.length - 1;
     while (this.length > 0) {
-      const lineNum = this.length - 1;
       this.removeLine(lineNum, ignoreRecalc);
+      lineNum -= 1;
       // log.debug('Removed line', lineNum);
     }
     this.rebuildArray();

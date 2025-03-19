@@ -22,14 +22,28 @@ export const getField = vi.fn(function({fieldId}) {
 
 export const getValue = vi.fn(function(fieldId) {
   this.fieldId = fieldId
-  return 123
+  return 0
 });
 
 export const getText = vi.fn(function(fieldId) {
   this.fieldId = fieldId
-  return "ABC"
+  return ""
 });
 
+export const setValue = vi.fn(function(fieldId) {
+  this.fieldId = fieldId
+});
+
+export const setText = vi.fn(function(fieldId) {
+  this.fieldId = fieldId
+});
+
+export const getSubrecord = vi.fn(function(fieldId) {
+});
+
+export const getLineCount = vi.fn();
+export const insertLine = vi.fn();
+export const selectNewLine = vi.fn();
+export const removeLine = vi.fn();
+
 export const Type= vi.fn();
-
-

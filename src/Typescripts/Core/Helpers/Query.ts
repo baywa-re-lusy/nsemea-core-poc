@@ -31,6 +31,7 @@ export class LazyQuery {
     this.mappedData = [];
 
     if (pagedQuery) {
+      log.debug({ title: 'Lazy Query Constructor', details: 'paged query'});
       if (pageSize > 1000) throw new Error('page size must be <= 1000');
 
       let pagedData: query.PagedData;
@@ -49,6 +50,7 @@ export class LazyQuery {
       log.debug(`lazy query `,
         `using page size ${pagedData.pageSize}, record count ${pagedData.count}`);
     } else {
+      log.debug({ title: 'Lazy Query Constructor', details: 'non paged query'});
       let queryResults: query.ResultSet;
       if(!q.params) {
         queryResults = query.runSuiteQL({query: q.query});
@@ -68,8 +70,10 @@ export class LazyQuery {
   static from (q: {query: string, params?: Array<string | number | boolean>}, pageSize?: number) {
     let result: LazyQuery;
     if (typeof(pageSize) !== 'undefined') {
+      log.debug({ title: 'Lazy Query From', details: 'paged query'});
       result = new LazyQuery(q, pageSize, true);
     } else {
+      log.debug({ title: 'Lazy Query From', details: 'non paged query'});
       result = new LazyQuery(q, pageSize, false);
     }
     return result;
