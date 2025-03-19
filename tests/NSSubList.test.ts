@@ -114,7 +114,7 @@ describe('NSSubList adding a new line', () => {
   });
 });
 
-describe('NSSubList remove all lines', () => {
+describe('NSSubList removing lines', () => {
   it('should remove all lines from a given sublist', () => {
 
     class fakeSublist extends NSSubListLine {
@@ -132,13 +132,45 @@ describe('NSSubList remove all lines', () => {
       }
     }
 
-    record.getLineCount.mockReturnValueOnce(3).mockReturnValueOnce(3);
+    record.getLineCount.mockReturnValue(3);
 
     const fRec = new fakeTran(1);
     console.log('length', fRec.fSubList.length);
     fRec.fSubList.removeAllLines();
 
+    expect(record.removeLine).toHaveBeenCalledTimes(3);
+
+  });
+
+  it('should remove a given line from a given sublist', () => {
+
+    class fakeSublist extends NSSubListLine {
+      @SubListFieldTypeDecorator()
+      accessor fakeNumber: number;
+    }
+
+    class fakeTran extends TransactionBase {
+
+      @SubListDecorator(fakeSublist)
+      accessor fSubList: NSSubList<fakeSublist>;
+
+      override recordType() {
+        return 'fakeRec';
+      }
+    }
+
+    record.getLineCount.mockReturnValue(3);
+
+    const fRec = new fakeTran(1);
+    console.log('length', fRec.fSubList.length);
+    fRec.fSubList.removeLine(2);
+
     expect(record.removeLine).toHaveBeenCalledTimes(1);
+    expect(record.removeLine).toBeCalledWith({
+      line: 2,
+      sublistId: 'fSubList',
+      ignoreRecalc: false
+    });
 
   });
 });

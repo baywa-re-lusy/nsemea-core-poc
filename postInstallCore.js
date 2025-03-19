@@ -9,9 +9,16 @@ fsExtra.copy(source,destination,{ preserveTimestamps:true}, err => {
   console.error(err);
 });
 
+const source = path.join(process.cwd(),"tests/__mock__/N");
+const destination = '../../tests/__mock__/N';
+console.log(`copying mocked Netsuite record from ${source} to ${destination}`);
+fsExtra.copy(source,destination,{ preserveTimestamps:true}, err => {
+  console.error(err);
+});
+
 console.log(`path : ${__dirname}`);
 const gitignorePath = path.resolve(__dirname, '../../.gitignore');
-const entriesToAdd = ['src/Typescripts/Core'];
+const entriesToAdd = ['src/Typescripts/Core', 'tests/__mock__/N'];
 
 console.log(`gitignorePath ${gitignorePath}`);
 

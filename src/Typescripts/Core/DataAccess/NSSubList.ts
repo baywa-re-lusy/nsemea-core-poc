@@ -132,11 +132,10 @@ export class NSSubList<T extends NSSubListLine> {
    * @param ignoreRecalc passed through to nsrecord.removeLine (ignores firing recalc event as each line is removed )
    */
   removeAllLines(ignoreRecalc = true) {
-    let lineNum = this.length - 1;
-    while (this.length > 0) {
-      this.removeLine(lineNum, ignoreRecalc);
+    let lineNum = this.length;
+    while (lineNum > 0) {
       lineNum -= 1;
-      // log.debug('Removed line', lineNum);
+      this.removeLine(lineNum, ignoreRecalc);
     }
     this.rebuildArray();
     return this;
