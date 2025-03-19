@@ -2,15 +2,15 @@ const fsExtra = require('fs-extra');
 const fs = require('fs');
 const path = require('path');
 
-const source = path.join(process.cwd(),"src/Typescripts/Core");
-const destination = '../../src/Typescripts/Core';
+let source = path.join(process.cwd(),"src/Typescripts/Core");
+let destination = '../../src/Typescripts/Core';
 console.log(`copying NSEMEA core library from ${source} to ${destination}`);
 fsExtra.copy(source,destination,{ preserveTimestamps:true}, err => {
   console.error(err);
 });
 
-const source = path.join(process.cwd(),"tests/__mock__/N");
-const destination = '../../tests/__mock__/N';
+source = path.join(process.cwd(),"tests/__mock__/N");
+destination = '../../tests/__mock__/N';
 console.log(`copying mocked Netsuite record from ${source} to ${destination}`);
 fsExtra.copy(source,destination,{ preserveTimestamps:true}, err => {
   console.error(err);
