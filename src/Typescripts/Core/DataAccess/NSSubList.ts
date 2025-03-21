@@ -384,7 +384,7 @@ export function SubListFieldTypeDecorator(options?: SubListTypeOptions) {
 export function SubListSubRecordDecorator<T extends NSTypedRecord>(
   ctor: new (rec: record.Record) => T
 ) {
-  return function <T extends NSTypedRecord, V extends NSTypedRecord>(
+  return function <T extends NSSubListLine, V extends NSTypedRecord>(
     accessor: { get: (this: T) => V },
     context: ClassAccessorDecoratorContext<T, V>,
   ) {
