@@ -5,6 +5,7 @@ import { NSSubListLine } from './NSSubListLine';
 import * as record from 'N/record';
 import * as log from 'N/log';
 import { FieldValue } from 'N/record';
+import {NSTypedRecord} from "./NSTypedRecord"
 
 export class NSSubList<T extends NSSubListLine> {
   /**
@@ -334,6 +335,25 @@ function getSublistValue(
   }
 }
 
+function getSubRecord(this: NSSubListLine, fieldId: string) {
+  if (this.useDynamicModeAPI) {
+    this._nsRecord.selectLine({
+      sublistId: this._subListId,
+      line: this._line,
+    });
+    return this._nsRecord.getCurrentSublistSubrecord({
+      fieldId: fieldId,
+      sublistId: this._subListId,
+    });
+  } else {
+    return this._nsRecord.getSublistSubrecord({
+      fieldId: fieldId,
+      sublistId: this._subListId,
+      line: this._line,
+    });
+  }
+}
+
 export interface SubListTypeOptions {
   fieldId?: string;
   asText?: boolean;
@@ -357,6 +377,25 @@ export function SubListFieldTypeDecorator(options?: SubListTypeOptions) {
     return {
       get: getter,
       set: setter,
+    };
+  };
+}
+
+export function SubListSubRecordDecorator<T extends NSTypedRecord>(
+  ctor: new (rec: record.Record) => T
+) {
+  return function <T extends NSTypedRecord, V extends NSTypedRecord>(
+    accessor: { get: (this: T) => V },
+    context: ClassAccessorDecoratorContext<T, V>,
+  ) {
+    const getter = function (this: T) {
+      return new ctor(
+        getSubRecord.call(this, context.name.toString()) as record.Record,
+      );
+    };
+
+    return {
+      get: getter,
     };
   };
 }

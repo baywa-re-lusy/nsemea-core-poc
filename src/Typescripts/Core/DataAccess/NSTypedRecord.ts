@@ -270,7 +270,7 @@ export function SubListDecorator<T extends NSSubListLine>(
 }
 
 export function SubRecordDecorator<T extends NSTypedRecord>(
-  ctor: new (rec: record.Record) => T,
+  ctor: new (rec: record.Record) => T
 ) {
   return function <T extends NSTypedRecord, V extends NSTypedRecord>(
     accessor: { get: (this: T) => V },
