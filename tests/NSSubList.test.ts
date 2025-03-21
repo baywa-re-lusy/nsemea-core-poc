@@ -175,26 +175,3 @@ describe('NSSubList removing lines', () => {
   });
 });
 
-describe('NSSubList get field value', () => {
-  it('should return a numeric value for a given field', () => {
-
-    class fakeSublist extends NSSubListLine {
-      @SubListFieldTypeDecorator()
-      accessor fakeNumber: number;
-    }
-
-    class fakeTran extends TransactionBase {
-
-      @SubListDecorator(fakeSublist)
-      accessor fSubList: NSSubList<fakeSublist>;
-
-      override recordType() {
-        return 'fakeRec';
-      }
-    }
-
-    new fakeTran(1);
-
-
-  });
-});
