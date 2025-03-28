@@ -16,7 +16,6 @@ fsExtra.copy(source,destination,{ preserveTimestamps:true}, err => {
   console.error(err);
 });
 
-/*
 console.log(`path : ${__dirname}`);
 const gitignorePath = path.resolve(__dirname, '../../.gitignore');
 const entriesToAdd = ['src/Typescripts/modules/**', 'tests/__mock__/N'];
@@ -45,4 +44,3 @@ fs.readFile(gitignorePath, 'utf8', (err, data) => {
     console.log('.gitignore file already contains the specified entries.');
   }
 });
-*/
