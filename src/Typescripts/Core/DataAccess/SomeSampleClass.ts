@@ -10,7 +10,6 @@ import {
   SubListDecorator,
   SubRecordDecorator,
 } from './NSTypedRecord';
-import { AddressBase } from './AddressBase';
 import { NSSubListLine } from './NSSubListLine';
 import { NSSubList, SubListFieldTypeDecorator } from './NSSubList';
 
@@ -111,12 +110,6 @@ export class SomeSampleClass extends TransactionBase {
 
   @FieldTypeDecorator()
   accessor shipto: Nullable<number>;
-
-  @SubRecordDecorator(AddressBase)
-  accessor billingaddress: AddressBase;
-
-  @SubRecordDecorator(AddressBase)
-  accessor shippingaddress: AddressBase;
 
   @FieldTypeDecorator()
   accessor terms: Nullable<number>;

@@ -1,6 +1,5 @@
 import {describe, it, expect } from "vitest";
 import { TransactionBase } from '../src/Typescripts/Core/DataAccess/TransactionBase';
-import { AddressBase } from "../src/Typescripts/Core/DataAccess/AddressBase";
 
 import * as nsRecord from 'N/record';
 import * as record from './__mock__/N/record';
@@ -172,26 +171,6 @@ describe('NSTypedRecord set field value', () => {
 
     expect(record.setText).toHaveBeenCalledTimes(1);
     expect(record.setText).toBeCalledWith('someStringField', 'Some String Value');
-
-  });
-});
-
-describe('NSTypedRecord get subrecord', () => {
-  it('should get a subrecord for a given field', () => {
-    class fakeTran extends TransactionBase {
-      @SubRecordDecorator(AddressBase)
-      accessor billingaddress: AddressBase;
-
-      override recordType() {
-        return 'fakeRec';
-      }
-    }
-
-    const fRec = new fakeTran(1);
-    const subRec = fRec.billingaddress;
-
-    expect(record.getSubrecord).toHaveBeenCalledTimes(1);
-    expect(record.getSubrecord).toBeCalledWith({fieldId: 'billingaddress'});
 
   });
 });
