@@ -18,7 +18,7 @@ fsExtra.copy(source,destination,{ preserveTimestamps:true}, err => {
 
 console.log(`path : ${__dirname}`);
 const gitignorePath = path.resolve(__dirname, '../../.gitignore');
-const entriesToAdd = ['src/Typescripts/modules/**', 'tests/__mock__/N'];
+const entriesToAdd = ['src/Typescripts/modules', 'tests/__mock__/N'];
 
 console.log(`gitignorePath ${gitignorePath}`);
 
